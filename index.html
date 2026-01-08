@@ -3,1884 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birbank | HR Audit</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Birbank - HR Audit Checklist (Fixed)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --birbank: #E30613;
-            --birbank-dark: #B8050F;
-            --birbank-darker: #8B0000;
-            --bg: #F8FAFC;
-            --card: #FFFFFF;
-            --text: #1E293B;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --success: #10B981;
-            --success-bg: #ECFDF5;
-            --warning: #F59E0B;
-            --warning-bg: #FEF3C7;
-            --info: #3B82F6;
-            --info-bg: #EFF6FF;
+            --primary: #E30613; --primary-hover: #BF2600;
+            --bg-body: #F4F5F7; --card-bg: #FFFFFF;
+            --text-main: #172B4D; --text-muted: #6B778C;
+            --border-color: #DFE1E6;
+            --success-bg: #E3FCEF; --success-text: #006644;
+            --warning-bg: #FFF0B3; --warning-text: #B38600;
+            --danger-bg: #FFEBE6; --danger-text: #BF2600;
+            --info-bg: #DEEBFF; --info-text: #0747A6;
+            --purple-bg: #EAE6FF; --purple-text: #403294;
+            --radius: 12px;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 80px; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .header { background: var(--card-bg); padding: 20px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .container { max-width: 1440px; margin: 0 auto; padding: 0 30px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+        .brand i { color: var(--primary); font-size: 1.6rem; }
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text);
-            min-height: 100vh;
-        }
+        .sync-status { background: var(--success-bg); color: var(--success-text); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .sync-indicator { width: 8px; height: 8px; background: currentColor; border-radius: 50%; animation: pulse 2s infinite; }
+        .sync-loading { background: var(--warning-bg); color: var(--warning-text); }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* Header */
-        .header {
-            background: var(--card);
-            padding: 16px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .stats-dashboard { margin-top: 35px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .stat-card { background: var(--card-bg); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .stat-icon { width: 60px; height: 60px; border-radius: 14px; background: rgba(227, 6, 19, 0.08); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 1.6rem; }
+        .stat-text { flex: 1; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: var(--text-main); }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .progress-wrapper { margin-top: 10px; width: 100%; height: 8px; background: #EBECF0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.6s ease; }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.25rem;
-            font-weight: 800;
-        }
-
-        .brand-icon { color: var(--birbank); font-size: 1.5rem; }
-        .brand span { color: var(--text); }
-        .brand .highlight { color: var(--birbank); }
-
-        .sync-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--success-bg);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--success);
-        }
-
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--birbank) 0%, var(--birbank-dark) 60%, var(--birbank-darker) 100%);
-            padding: 48px 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 400px;
-            height: 400px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 2.75rem;
-            font-weight: 900;
-            color: white;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            color: rgba(255,255,255,0.85);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        /* Stats */
-        .stats-section {
-            margin-top: -30px;
-            position: relative;
-            z-index: 10;
-            margin-bottom: 30px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .stat-icon.red { background: #FEE2E2; color: var(--birbank); }
-        .stat-icon.green { background: var(--success-bg); color: var(--success); }
-        .stat-icon.yellow { background: var(--warning-bg); color: var(--warning); }
-        .stat-icon.blue { background: var(--info-bg); color: var(--info); }
-
-        .stat-content h3 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--birbank);
-            line-height: 1;
-        }
-
-        .stat-content p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .stat-card.progress-card {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-        }
-
-        .stat-card.progress-card .stat-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .progress-bar-bg {
-            height: 8px;
-            background: var(--bg);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--birbank), var(--warning));
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-
-        /* Filter */
-        .filter-section {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .filter-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .search-box {
-            flex: 1;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 48px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            background: var(--bg);
-            transition: all 0.3s;
-            color: var(--text);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--birbank);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
-        }
-
-        .search-input::placeholder { color: var(--text-muted); }
-
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 18px;
-        }
-
-        .filter-buttons { display: flex; gap: 10px; }
-
-        .filter-btn {
-            padding: 14px 24px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            background: white;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--birbank);
-            color: var(--birbank);
-        }
-
-        .filter-btn.active {
-            background: var(--birbank);
-            border-color: var(--birbank);
-            color: white;
-        }
-
-        /* Categories */
-        .categories-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-bottom: 40px;
-        }
-
-        .category-card {
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .category-header {
-            background: linear-gradient(135deg, var(--birbank) 0%, var(--birbank-dark) 100%);
-            padding: 22px 28px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-        }
-
-        .category-header:hover {
-            background: linear-gradient(135deg, var(--birbank-dark) 0%, var(--birbank) 100%);
-        }
-
-        .category-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .category-icon {
-            width: 52px;
-            height: 52px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-        }
-
-        .category-text h3 {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .category-badge {
-            background: rgba(255,255,255,0.25);
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: white;
-        }
-
-        .category-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .category-progress {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 10px 16px;
-            border-radius: 12px;
-        }
-
-        .category-progress-bar {
-            width: 120px;
-            height: 8px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .category-progress-fill {
-            height: 100%;
-            background: white;
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-
-        .category-progress-text {
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            min-width: 45px;
-            text-align: right;
-        }
-
-        .category-toggle {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            transition: transform 0.3s;
-        }
-
+        .category { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .category-header { padding: 24px 30px; background: linear-gradient(to right, #fff, #FAFBFC); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .cat-left { display: flex; align-items: center; gap: 18px; flex: 1; }
+        .category-icon-wrapper { width: 48px; height: 48px; background: var(--text-main); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .category-title { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+        .category-badge { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        .cat-right { display: flex; align-items: center; gap: 24px; }
+        .cat-progress-container { display: flex; align-items: center; gap: 12px; width: 200px; }
+        .cat-progress-bar { flex: 1; height: 8px; background: #EBECF0; border-radius: 4px; overflow: hidden; }
+        .cat-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.4s ease; }
+        .cat-progress-text { font-size: 0.85rem; font-weight: 700; color: var(--text-main); min-width: 45px; text-align: right; }
+        .category-toggle { transition: transform 0.3s; color: var(--text-muted); font-size: 1.2rem; }
         .category-toggle.active { transform: rotate(180deg); }
+        .category-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #fff; }
+        .category-content.active { max-height: 20000px; }
 
-        .category-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s;
-        }
+        .subcategory-header { padding: 16px 30px; background: #FAFBFC; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+        .subcategory-count { background: var(--text-muted); color: white; padding: 2px 10px; border-radius: 10px; font-size: 0.75rem; }
+        .subcategory-content { display: none; }
+        .subcategory-content.active { display: block; }
 
-        .category-body.active { max-height: 100000px; }
-
-        /* Subcategory */
-        .subcategory { border-bottom: 1px solid var(--border); }
-        .subcategory:last-child { border-bottom: none; }
-
-        .subcategory-header {
-            padding: 18px 28px;
-            background: #F8FAFC;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s;
-        }
-
-        .subcategory-header:hover { background: #EEF2F7; }
-
-        .subcategory-title {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .subcategory-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--birbank), var(--birbank-dark));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-        }
-
-        .subcategory-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .subcategory-count {
-            background: var(--birbank);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .subcategory-body {
-            padding: 0;
-            background: white;
-            display: none;
-        }
-
-        .subcategory-body.active {
-            display: block;
-            padding: 24px 28px;
-        }
-
-        /* Item */
-        .item {
-            background: var(--bg);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 14px;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: transparent;
-            border-radius: 14px 0 0 14px;
-            transition: background 0.3s;
-        }
-
-        .item:hover {
-            border-color: var(--birbank);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(227, 6, 19, 0.1);
-        }
-
-        .item:hover::before { background: var(--birbank); }
-
-        .item.checked {
-            background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
-            border-color: var(--success);
-        }
-
-        .item.checked::before { background: var(--success); }
-
-        .item.has-notes { border-color: var(--warning); }
-        .item.has-notes::before { background: var(--warning); }
-
-        .item-main {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .item-checkbox {
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            background: white;
-            flex-shrink: 0;
-            margin-top: 2px;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .item-checkbox:hover { border-color: var(--birbank); transform: scale(1.1); }
-
-        .item-checkbox:checked {
-            background: var(--success);
-            border-color: var(--success);
-        }
-
-        .item-checkbox:checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 14px;
-            font-weight: 900;
-        }
-
+        .checklist-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 30px; border-bottom: 1px solid var(--border-color); transition: background 0.2s; }
+        .checklist-item:hover { background-color: #FAFBFC; }
+        .checklist-item.checked { background-color: #F8F9FA; }
+        .checklist-item.checked .item-main-text { text-decoration: line-through; color: var(--text-muted); }
+        .checklist-item.has-notes { background: #FFFDF5; border-left: 4px solid var(--warning-text); }
+        .checkbox-wrapper { padding-top: 4px; }
+        .checkbox { appearance: none; width: 24px; height: 24px; border: 2px solid var(--border-color); border-radius: 6px; cursor: pointer; position: relative; background: #fff; transition: 0.2s; }
+        .checkbox:checked { background: var(--primary); border-color: var(--primary); }
+        .checkbox:checked::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 14px; }
         .item-content { flex: 1; }
+        .item-text { font-size: 1.05rem; color: var(--text-main); font-weight: 500; line-height: 1.5; }
+        .item-id { font-size: 0.75rem; color: #ccc; margin-right: 8px; font-weight: 700; }
+        .item-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .meta-badge { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; gap: 6px; }
+        .meta-badge.status { background: var(--info-bg); color: var(--info-text); }
+        .meta-badge.priority { background: var(--danger-bg); color: var(--danger-text); }
+        .meta-badge.responsible { background: var(--purple-bg); color: var(--purple-text); text-transform: none; }
+        .meta-badge.date { background: #EBECF0; color: var(--text-main); }
+        .item-note-display { margin-top: 12px; padding: 12px 16px; background: #FFF; border: 1px dashed var(--warning-text); border-radius: 8px; font-size: 0.9rem; color: var(--text-main); display: none; }
+        .item-note-display.visible { display: block; }
+        .item-note-label { font-weight: 700; font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        
+        .btn-note { background: white; color: var(--text-muted); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; margin-left: 15px; }
+        .btn-note:hover { border-color: var(--primary); color: var(--primary); }
+        .has-notes .btn-note { background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-bg); }
 
-        .item-text {
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.6;
-            margin-bottom: 12px;
-            color: var(--text);
-            transition: all 0.3s;
-        }
-
-        .item-text.completed {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-
-        .item-badges {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .badge {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .badge-status { background: #ECFDF5; color: #065F46; }
-        .badge-person { background: #EFF6FF; color: #1E40AF; }
-        .badge-priority { background: #FEE2E2; color: #991B1B; }
-
-        .notes-preview {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            border-left: 4px solid var(--warning);
-            padding: 14px 16px;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            display: none;
-        }
-
-        .notes-preview.visible { display: block; }
-
-        .notes-preview-header {
-            font-weight: 700;
-            color: #92400E;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .notes-preview-text {
-            color: var(--text);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-
-        .btn-note { background: linear-gradient(135deg, var(--warning), #D97706); color: white; }
-        .btn-primary { background: linear-gradient(135deg, var(--birbank), var(--birbank-dark)); color: white; }
-        .btn-secondary { background: #6B7280; color: white; }
-
-        /* Export */
-        .export-section {
-            background: linear-gradient(135deg, var(--birbank), var(--birbank-dark));
-            padding: 32px 40px;
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .btn-export {
-            background: white;
-            color: var(--birbank);
-            padding: 14px 28px;
-            font-size: 0.95rem;
-        }
-
-        .btn-export:hover { background: #F8FAFC; }
-
-        .footer {
-            background: #1E293B;
-            padding: 20px;
-            text-align: center;
-            color: rgba(255,255,255,0.6);
-            font-size: 0.85rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            z-index: 2000;
-            backdrop-filter: blur(6px);
-        }
-
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-dialog {
-            background: white;
-            border-radius: 24px;
-            max-width: 650px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, var(--birbank), var(--birbank-dark));
-            padding: 30px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 6px;
-        }
-
-        .modal-subtitle {
-            color: rgba(255,255,255,0.85);
-            font-size: 0.95rem;
-        }
-
-        .modal-body { padding: 30px; }
-
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(23, 43, 77, 0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-content { background: white; width: 100%; max-width: 600px; border-radius: 20px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .modal-icon { width: 48px; height: 48px; background: var(--primary); color: white; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; }
+        .modal-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
         .form-group { margin-bottom: 24px; }
-
-        .form-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text);
-        }
-
-        .form-label-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--birbank), var(--birbank-dark));
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .form-input, .form-textarea, .form-select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            background: var(--bg);
-            transition: all 0.3s;
-            color: var(--text);
-            font-family: inherit;
-        }
-
+        .form-label { display: block; margin-bottom: 10px; font-weight: 700; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 1rem; background: #FAFBFC; color: var(--text-main); }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); background: white; outline: none; }
         .form-textarea { min-height: 120px; resize: vertical; }
+        .modal-buttons { display: flex; gap: 16px; margin-top: 40px; }
+        .btn { flex: 1; padding: 16px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: #EBECF0; color: var(--text-main); }
+        
+        .notification { position: fixed; top: 30px; right: 30px; background: white; padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 16px; z-index: 3000; transform: translateX(150%); transition: transform 0.4s; border-left: 5px solid var(--success-text); }
+        .notification.active { transform: translateX(0); }
+        .notification-icon { color: var(--success-text); font-size: 1.5rem; }
+        .notification-text { font-weight: 600; color: var(--text-main); }
 
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--birbank);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
-        }
+        .control-panel { background: var(--card-bg); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border-color); margin-bottom: 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .search-wrapper { flex: 1; position: relative; min-width: 300px; }
+        .search-input { width: 100%; padding: 14px 16px 14px 50px; border: 2px solid var(--border-color); border-radius: 10px; background: #FAFBFC; font-weight: 500; }
+        .search-input:focus { border-color: var(--primary); background: #fff; }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
+        .filter-buttons { display: flex; gap: 12px; }
+        .filter-btn { padding: 12px 20px; border: 1px solid var(--border-color); background: white; border-radius: 10px; cursor: pointer; font-weight: 600; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .export-section { display: flex; justify-content: center; gap: 16px; margin: 50px 0; }
+        .btn-export { padding: 14px 28px; background: var(--text-main); color: white; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 1rem; }
 
-        .modal-footer {
-            padding: 0 30px 30px;
-            display: flex;
-            gap: 14px;
-        }
-
-        .modal-footer .btn { flex: 1; justify-content: center; padding: 16px; }
-
-        .notification {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: white;
-            border-radius: 16px;
-            padding: 20px 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            z-index: 3000;
-            display: none;
-            min-width: 340px;
-            border-left: 5px solid var(--success);
-        }
-
-        .notification.active { display: flex; gap: 16px; align-items: center; }
-        .notification.error { border-left-color: #EF4444; }
-
-        .notification-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--success);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .notification.error .notification-icon { background: #EF4444; }
-        .notification-title { font-weight: 700; margin-bottom: 4px; }
-        .notification-text { font-size: 0.85rem; color: var(--text-muted); }
-
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            z-index: 2500;
-            backdrop-filter: blur(6px);
-        }
-
-        .loading.active { display: flex; justify-content: center; align-items: center; }
-
-        .loading-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--bg);
-            border-top: 5px solid var(--birbank);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-text { font-weight: 700; font-size: 1.05rem; color: var(--text); }
-
-        @media (max-width: 1100px) { 
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .category-progress { display: none; }
-        }
-        @media (max-width: 768px) {
-            .container { padding: 0 20px; }
-            .header { padding: 12px 20px; }
-            .hero { padding: 32px 20px; }
-            .hero h1 { font-size: 2rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .filter-row { flex-direction: column; }
-            .filter-buttons { width: 100%; flex-wrap: wrap; }
-            .filter-btn { flex: 1; justify-content: center; }
-        }
+        @media (max-width: 768px) { .stats-dashboard { grid-template-columns: 1fr; } .cat-progress-container { display: none; } .checklist-item { padding: 20px; flex-direction: column; align-items: flex-start; } .btn-note { margin-left: 0; margin-top: 10px; width: 100%; justify-content: center; } }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="brand">
-            <span class="brand-icon">☑️</span>
-            <span>Birbank | <span class="highlight">HR Audit</span></span>
+
+    <div class="header">
+        <div class="container header-content">
+            <div class="brand"><i class="fas fa-briefcase"></i> Birbank | HR Audit Checklist</div>
+            <div class="sync-status" id="syncStatus"><div class="sync-indicator"></div><span id="syncText">Google Sheets Aktiv</span></div>
         </div>
-        <div class="sync-badge">
-            <div class="sync-dot"></div>
-            <span>Google Sheets Aktiv</span>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1>HR AUDIT CHECKLIST</h1>
-            <p></p>
-        </div>
-    </section>
-
-    <div class="container">
-        <section class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon red">📋</div>
-                    <div class="stat-content">
-                        <h3 id="statTotal">0</h3>
-                        <p>Cəmi Maddə</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon green">✓</div>
-                    <div class="stat-content">
-                        <h3 id="statChecked">0</h3>
-                        <p>Tamamlandı</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon yellow">📝</div>
-                    <div class="stat-content">
-                        <h3 id="statNotes">0</h3>
-                        <p>Qeydli</p>
-                    </div>
-                </div>
-                <div class="stat-card progress-card">
-                    <div class="stat-header">
-                        <div class="stat-icon blue">📈</div>
-                        <div class="stat-content">
-                            <h3 id="statProgress">0%</h3>
-                            <p>Progress</p>
-                        </div>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="filter-section">
-            <div class="filter-row">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Maddələr arasında axtarış edin...">
-                </div>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="setFilter('all', this)">≡ Hamısı</button>
-                    <button class="filter-btn" onclick="setFilter('checked', this)">✓ Tamamlanmış</button>
-                    <button class="filter-btn" onclick="setFilter('notes', this)">📄 Qeydli</button>
-                </div>
-            </div>
-        </section>
-
-        <div class="categories-container" id="categoriesContainer"></div>
     </div>
 
-    <section class="export-section">
-        <button class="btn btn-export" onclick="exportToExcel()">📊 Excel Export</button>
-        <button class="btn btn-export" onclick="window.print()">📄 PDF Export</button>
-        <button class="btn btn-export" onclick="window.print()">🖨️ Print</button>
-    </section>
+    <div class="container">
+        <div class="stats-dashboard">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-list"></i></div><div class="stat-text"><div class="stat-value" id="totalItems">0</div><div class="stat-label">Cəmi Maddə</div></div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: var(--success-bg); color: var(--success-text);"><i class="fas fa-check"></i></div><div class="stat-text"><div class="stat-value" id="checkedItems">0</div><div class="stat-label">Tamamlandı</div></div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: var(--warning-bg); color: var(--warning-text);"><i class="fas fa-comment-dots"></i></div><div class="stat-text"><div class="stat-value" id="withNotes">0</div><div class="stat-label">Qeydli Maddələr</div></div></div>
+            <div class="stat-card"><div class="stat-icon" style="background: var(--info-bg); color: var(--info-text);"><i class="fas fa-chart-pie"></i></div><div class="stat-text"><div class="stat-value" id="progressPercent">0%</div><div class="stat-label">Ümumi Progress</div><div class="progress-wrapper"><div class="progress-fill" id="progressBar" style="width: 0%"></div></div></div></div>
+        </div>
 
-    <footer class="footer">© 2025 HR Audit Checklist - Birbank Edition</footer>
+        <div class="content-area">
+            <div class="control-panel">
+                <div class="search-wrapper"><i class="fas fa-search search-icon"></i><input type="text" id="searchInput" class="search-input" placeholder="Maddələr arasında axtarış..."></div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterItems('all')"><i class="fas fa-layer-group"></i> Hamısı</button>
+                    <button class="filter-btn" onclick="filterItems('checked')"><i class="fas fa-check-circle"></i> Tamam</button>
+                    <button class="filter-btn" onclick="filterItems('notes')"><i class="fas fa-sticky-note"></i> Qeydli</button>
+                </div>
+            </div>
+            <div id="categoriesContainer"></div>
+        </div>
+
+        <div class="export-section">
+            <button class="btn-export" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Excel İxrac</button>
+            <button class="btn-export" onclick="window.print()"><i class="fas fa-print"></i> Çap Et</button>
+        </div>
+    </div>
 
     <div class="modal" id="noteModal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <div class="modal-title">📝 Qeyd Əlavə Et</div>
-                <div class="modal-subtitle">Audit məlumatlarını daxil edin</div>
-            </div>
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-icon"><i class="fas fa-pen"></i></div><h2 class="modal-title">Audit Qeydi və Status</h2></div>
             <form id="noteForm">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="form-label"><div class="form-label-icon">🚦</div>Status</label>
-                        <select class="form-select" id="itemStatus">
-                            <option value="completed">✅ Tamamlandı</option>
-                            <option value="in-progress">🔄 İcrada</option>
-                            <option value="pending">⏳ Gözləyir</option>
-                            <option value="issue">⚠️ Problem var</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label"><div class="form-label-icon">💬</div>Qeydlər</label>
-                        <textarea class="form-textarea" id="itemNotes" placeholder="Audit məlumatlarını daxil edin..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label"><div class="form-label-icon">👤</div>Məsul Şəxs</label>
-                        <input type="text" class="form-input" id="responsiblePerson" placeholder="Ad Soyad">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label"><div class="form-label-icon">🚩</div>Prioritet</label>
-                        <select class="form-select" id="itemPriority">
-                            <option value="low">🟢 Aşağı</option>
-                            <option value="medium">🟡 Orta</option>
-                            <option value="high">🟠 Yüksək</option>
-                            <option value="critical">🔴 Kritik</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label"><div class="form-label-icon">📅</div>Son Tarix</label>
-                        <input type="date" class="form-input" id="itemDueDate">
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="itemStatus">
+                        <option value="pending">⏳ Gözləyir</option>
+                        <option value="in-progress">🔄 İcrada</option>
+                        <option value="completed">✅ Tamamlandı</option>
+                        <option value="issue">⚠️ Problem/Risk</option>
+                    </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">💾 Yadda Saxla</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ Ləğv et</button>
-                </div>
+                <div class="form-group"><label class="form-label">Müşahidə və Qeydlər</label><textarea class="form-textarea" id="itemNotes" placeholder="Audit zamanı aşkar edilən faktlar..."></textarea></div>
+                <div class="form-group"><label class="form-label">Məsul Şəxs</label><input type="text" class="form-input" id="responsiblePerson" placeholder="Ad Soyad"></div>
+                <div class="form-group"><label class="form-label">Prioritet</label><select class="form-select" id="itemPriority"><option value="low">🟢 Aşağı</option><option value="medium">🟡 Orta</option><option value="high">🟠 Yüksək</option><option value="critical">🔴 Kritik</option></select></div>
+                <div class="form-group"><label class="form-label">Son Tarix</label><input type="date" class="form-input" id="itemDueDate"></div>
+                <div class="modal-buttons"><button type="submit" class="btn btn-primary">Yadda Saxla</button><button type="button" class="btn btn-secondary" onclick="closeModal()">Ləğv Et</button></div>
             </form>
         </div>
     </div>
-
-    <div class="notification" id="notification">
-        <div class="notification-icon">✓</div>
-        <div class="notification-content">
-            <div class="notification-title" id="notificationTitle">Uğurlu!</div>
-            <div class="notification-text" id="notificationText">Əməliyyat tamamlandı</div>
-        </div>
-    </div>
-
-    <div class="loading" id="loadingOverlay">
-        <div class="loading-box">
-            <div class="spinner"></div>
-            <div class="loading-text">Google Sheets-ə göndərilir...</div>
-        </div>
-    </div>
+    
+    <div class="notification" id="notification"><div class="notification-icon"><i class="fas fa-check-circle"></i></div><div class="notification-text" id="notificationText"></div></div>
 
     <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBJqpIDqu0ACuDkcb1_ueMm4jfga9JVpCVvtsU8q9Ct-c17nQ7YxJWBbpggvhJ_hS6/exec';
+        // SİZİN YENİ LİNKİNİZİ BURAYA QOYDUM:
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyuTVkENzEskOgy7DAUor2G57Kq_c7lQ8Jte-HJB4LTUl-hGK8KRUw2eYbTGaDbuNeyAQ/exec';
 
-const auditData = {
-    "1. HR Governance & Policy": {
-        icon: "📋",
-        subcategories: {
-            "1.1 Siyasət və Prosedurlar": [
-                "HR siyasət və prosedurlarının mövcudluğu və aktuallaşdırılması",
-                "Daxili əmək qaydaları aktının mövcudluğu və qanunvericiliyə uyğunluğu",
-                "HR prosedurlarının sənədləşdirilməsi (recruitment, onboarding, offboarding)",
-                "Konfidensiallik və məxfilik siyasətlərinin mövcudluğu",
-                "Etik kodeksin mövcudluğu və işçilərə çatdırılması",
-                "Şikayət mexanizminin mövcudluğu və işlərliyi",
-                "Anti-korrupsiya və anti-rüşvətxorluq siyasətləri",
-                "Davranış qaydaları və intizam prosedurları"
-            ],
-            "1.2 Struktur və Rollar": [
-                "Təşkilati strukturun mövcudluğu və aktuallaşdırılması",
-                "Vəzifə təlimatlarının bütün vəzifələr üzrə mövcudluğu",
-                "Vəzifə təlimatlarının aktuallaşdırılması (son 2 il ərzində)",
-                "Səlahiyyət və məsuliyyət matrisinin mövcudluğu",
-                "HR departamentinin strukturu və resurslarının kifayətliyi",
-                "Rol və məsuliyyətlərin aydın müəyyənləşdirilməsi"
-            ],
-            "1.3 Compliance və Risk İdarəetməsi": [
-                "Əmək Məcəlləsi tələblərinə uyğunluq",
-                "SSİV (DOST) əlaqələrinin düzgünlüyü",
-                "Vergi qanunvericiliyinə uyğunluq",
-                "Məlumat mühafizəsi və GDPR tələblərinə uyğunluq",
-                "HR risk reyestrinin mövcudluğu",
-                "Daxili nəzarət mexanizmlərinin mövcudluğu",
-                "Xarici audit tövsiyyələrinin icrasının monitorinqi"
-            ]
-        }
-    },
-    "2. Recruitment & Onboarding": {
-        icon: "👥",
-        subcategories: {
-            "2.1 İşə Qəbul Prosesi": [
-                "İşə qəbul prosedurlarının sənədləşdirilməsi",
-                "Vakansiya təsdiqləmə prosesinin mövcudluğu",
-                "İş elanlarının qanunvericiliyə uyğunluğu (diskriminasiyasız)",
-                "Namizədlərin seçim meyarlarının mövcudluğu",
-                "Müsahibə prosesinin strukturlaşdırılması",
-                "Reference check prosesinin həyata keçirilməsi",
-                "Background check prosedurlarının mövcudluğu",
-                "Job offer məktublarının standartlaşdırılması",
-                "İşə qəbul qərarlarının sənədləşdirilməsi"
-            ],
-            "2.2 Şəxsi İşlər və Sənədləşmə": [
-                "Şəxsi işlərin tam komplektliyi (hər bir vəzifə üzrə)",
-                "Ərizə və CV-nin mövcudluğu",
-                "Şəxsiyyət vəsiqəsinin surətinin mövcudluğu",
-                "Təhsil haqqında sənədlərin surətlərinin mövcudluğu",
-                "İxtisas sertifikatlarının mövcudluğu (tələb olunarsa)",
-                "Tibbi arayışın mövcudluğu və müddətinin yoxlanılması",
-                "Əvvəlki iş yerlərindən əmək kitabçasının surəti",
-                "Foto şəkillərin mövcudluğu (2 ədəd 3x4)",
-                "Hərbi qulluqla bağlı sənədlərin mövcudluğu (kişilər üçün)",
-                "Ailə vəziyyəti haqqında sənədlərin mövcudluğu",
-                "Bank rekvizitlərinin mövcudluğu",
-                "Konfidensiallik müqaviləsinin imzalanması",
-                "ƏMAS-a (SİMA) qeydiyyatın düzgünlüyü"
-            ],
-            "2.3 Əmək Müqavilələri": [
-                "Əmək müqavilələrinin yazılı formasının mövcudluğu",
-                "Müqavilələrin qanunvericiliyə uyğunluğu",
-                "Sınaq müddətinin düzgün tətbiqi və sənədləşdirilməsi",
-                "İş vəzifəsinin dəqiq göstərilməsi",
-                "Əmək haqqı məbləğinin düzgün əks olunması",
-                "İş saatlarının və iş rejiminin göstərilməsi",
-                "İş yerinin göstərilməsi",
-                "Müqavilə müddətinin göstərilməsi (müddətli/müddətsiz)",
-                "Tərəflərin imzalarının mövcudluğu və tarixləri",
-                "İşçiyə nüsxənin təhvil verilməsi"
-            ],
-            "2.4 Onboarding Prosesi": [
-                "Onboarding proqramının mövcudluğu",
-                "Yeni işçilər üçün orientasiya təlimləri",
-                "İş yerinin hazırlanması (texnika, giriş kartları və s.)",
-                "Mentor/buddy təyin edilməsi",
-                "İlk günlər üçün checklist-in mövcudluğu",
-                "Sınaq müddəti qiymətləndirmə prosesinin həyata keçirilməsi"
-            ]
-        }
-    },
-    "3. Əmək Münasibətləri": {
-        icon: "🤝",
-        subcategories: {
-            "3.1 Əmək Müqavilələrində Dəyişikliklər": [
-                "Vəzifə dəyişikliklərinin düzgün rəsmiləşdirilməsi",
-                "Əlavə razılaşmaların qanunvericiliyə uyğunluğu",
-                "Əmək haqqı dəyişikliklərinin sənədləşdirilməsi",
-                "İş yeri dəyişikliklərinin düzgünlüyü",
-                "İş rejimi dəyişikliklərinin rəsmiləşdirilməsi",
-                "Köçürmə əmrlərinin qanunvericiliyə uyğunluğu",
-                "ƏMAS-da dəyişikliklərin əks olunması"
-            ],
-            "3.2 İş Vaxtının Uçotu": [
-                "İş vaxtı uçotunun aparılma forması",
-                "Faktiki iş saatlarının düzgün qeydiyyatı",
-                "Tabelin düzgün aparılması",
-                "Gec gəlmələrin və erkən çıxışların qeydiyyatı",
-                "İş vaxtı sistemlərinin (HRIS) işlərliyi",
-                "İş vaxtı normalarına riayət edilməsi",
-                "Gecə iş saatlarının uçotu",
-                "Bayram və istirahət günlərində işin uçotu"
-            ],
-            "3.3 Növbəli İş Qrafiki": [
-                "Növbə cədvəllərinin qanunvericiliyə uyğunluğu",
-                "Cəmlənmiş iş vaxtı uçotunun düzgünlüyü",
-                "Növbələr arasında fasilələrin təmin edilməsi (min. 42 saat)",
-                "Gecə növbələrinin qanunvericiliyə uyğunluğu",
-                "Çoxnövbəli iş qrafikinin düzgün tətbiqi",
-                "İşçilərin razılığının alınması",
-                "Növbə dəyişikliklərinin qeydiyyatı"
-            ],
-            "3.4 İntizam Məsuliyyəti": [
-                "İntizam pozuntularının qeydiyyatı",
-                "İzahat məktublarının alınması",
-                "Töhmət əmrlərinin qanunvericiliyə uyğunluğu",
-                "Şiddətli töhmət tətbiqinin əsaslandırılması",
-                "İntizam cəzalarının proporsionallığı",
-                "Cəza tətbiq müddətlərinin riayət edilməsi",
-                "İşçinin müdafiə hüququnun təmin edilməsi",
-                "İntizam işlərinin sənədləşdirilməsi"
-            ],
-            "3.5 Xitam Prosesləri": [
-                "İşdən çıxarma əsaslarının qanunilliyi",
-                "Xəbərdarlıq müddətlərinin düzgünlüyü",
-                "İxtisar edilmə proseduralarının düzgünlüyü",
-                "Ödənişlərin tam hesablanması",
-                "İstifadə olunmamış məzuniyyət kompensasiyası",
-                "İş yerindən çıxarma kartının düzgün tərtib olunması",
-                "ƏMAS-dan çıxarışın düzgünlüyü",
-                "Əmək kitabçasına yazılışların düzgünlüyü",
-                "Exit interview prosesinin aparılması",
-                "Offboarding checklist-inin tamamlanması"
-            ]
-        }
-    },
-    "4. Məzuniyyətlər və Əlavə Tətillər": {
-        icon: "🏖️",
-        subcategories: {
-            "4.1 İllik Əmək Məzuniyyətləri": [
-                "Məzuniyyət planının tərtib olunması",
-                "Məzuniyyət hüququnun düzgün hesablanması",
-                "Məzuniyyət ərizələrinin rəsmiləşdirilməsi",
-                "Məzuniyyət əmrlərinin düzgünlüyü",
-                "Məzuniyyət ödənişlərinin hesablanması",
-                "Məzuniyyət ödənişinin 3 gün əvvəl ödənilməsi",
-                "Əmək məzuniyyətinin minimum 14 təqvim günü olması",
-                "İstifadə olunmamış məzuniyyətlərin uçotu",
-                "Məzuniyyət kompensasiyalarının düzgün hesablanması"
-            ],
-            "4.2 Əlavə Məzuniyyətlər": [
-                "Təhsil məzuniyyətlərinin qanunvericiliyə uyğun verilməsi",
-                "Hamiləlik və doğum məzuniyyətlərinin düzgünlüyü",
-                "Uşaq baxımı məzuniyyətlərinin rəsmiləşdirilməsi",
-                "Ödənişsiz məzuniyyətlərin düzgün tərtib olunması",
-                "Qismən ödənişli sosial məzuniyyətlərin qanunilliyi",
-                "Əlavə sosial məzuniyyətlərin (ailə hadisələri) verilməsi"
-            ],
-            "4.3 Xəstəlik Vərəqələri": [
-                "Xəstəlik vərəqələrinin qanuni olaraq tərtib edilməsi",
-                "Vərəqələrin elektron sistemdə yoxlanılması",
-                "Xəstəlik vərəqələrinin uçotu",
-                "Xəstəlik müavinətinin hesablanması",
-                "SSİV-dən kompensasiyanın alınması",
-                "Xəstəlik vərəqələri üzrə əmək haqqı ödənişlərinin düzgünlüyü"
-            ]
-        }
-    },
-    "5. Payroll və Kompensasiya": {
-        icon: "💰",
-        subcategories: {
-            "5.1 Əmək Haqqı Sistemləri": [
-                "Əmək haqqı siyasətinin mövcudluğu",
-                "Maaş strukturunun şəffaflığı",
-                "Əmək haqqı dərəcələrinin (grade/band) mövcudluğu",
-                "Minimum əmək haqqı tələblərinə riayət",
-                "Əmək haqqı artımı prosedurlarının mövcudluğu",
-                "Bonus və təşviq sistemlərinin sənədləşdirilməsi",
-                "Əlavə ödənişlərin (overtaym, gecə, bayram) düzgün hesablanması"
-            ],
-            "5.2 Əmək Haqqı Hesablamaları": [
-                "Faktiki iş saatlarına uyğun hesablamaların düzgünlüyü",
-                "Aylıq əmək haqqı hesablamalarının dəqiqliyi",
-                "Əlavə iş saatları üzrə əmək haqqının düzgün hesablanması",
-                "Gecə saatlarında işə görə əlavə ödəniş (50%)",
-                "Bayram və istirahət günlərində işə görə əlavə ödəniş (100%)",
-                "Növbəli iş qrafikində əmək haqqı hesablamalarının düzgünlüyü",
-                "Cəmlənmiş uçot sistemində hesablamaların düzgünlüyü",
-                "Məzuniyyət ödənişlərinin düzgün hesablanması",
-                "Orta əmək haqqının düzgün hesablanması",
-                "Xəstəlik müavinətinin düzgün hesablanması",
-                "Ezamiyyə ödənişlərinin hesablanması"
-            ],
-            "5.3 Tutulmalar və Vergilər": [
-                "Gəlir vergisinin (14%) düzgün tutulması",
-                "SSİV-yə (3%) ayırmalarının düzgünlüyü",
-                "İşsizlikdən sığorta (0.5%) ayırmalarının düzgünlüyü",
-                "İşəgötürən SSİV töhfələrinin (22%) düzgünlüyü",
-                "İcra vərəqələri üzrə tutulmaların düzgünlüyü",
-                "Alimentlərin düzgün tutulması",
-                "Əmək haqqı avanslarının tutulması",
-                "Digər tutulmaların qanuniliyi"
-            ],
-            "5.4 Payroll Prosesləri": [
-                "Payroll calendar-ın mövcudluğu",
-                "Əmək haqqı ödəniş tarixlərinin sabitliyi",
-                "Əmək haqqı payslip-lərinin işçilərə verilməsi",
-                "Bank köçürmələrinin vaxtında həyata keçirilməsi",
-                "Payroll məlumatlarının arxivləşdirilməsi",
-                "Payroll məlumatlarının məxfiliyinin təmin edilməsi",
-                "Əmək haqqı üzrə hesabatların hazırlanması"
-            ],
-            "5.5 Ezamiyyətlər": [
-                "Ezamiyyə əmrlərinin düzgün tərtib olunması",
-                "Ezamiyyə vəsiqələrinin rəsmiləşdirilməsi",
-                "Gündəlik ödənişlərin qanunvericiliyə uyğunluğu",
-                "Yol xərclərinin kompensasiyası",
-                "Yaşayış xərclərinin kompensasiyası",
-                "Ezamiyyə hesabatlarının təqdim edilməsi",
-                "Xarici ezamiyyətlər üzrə xüsusi qaydaların tətbiqi"
-            ]
-        }
-    },
-    "6. Benefits və Rewards": {
-        icon: "🎁",
-        subcategories: {
-            "6.1 Sosial Paket": [
-                "Sosial paket siyasətinin mövcudluğu",
-                "Tibbi sığorta proqramının mövcudluğu",
-                "Həyat sığortası proqramının mövcudluğu",
-                "Pensiya proqramının mövcudluğu (könüllü)",
-                "Nahar və nəqliyyat kompensasiyaları",
-                "Təhsil və inkişaf proqramlarına dəstək",
-                "İdman və wellness proqramları",
-                "Digər benefits-lərin sənədləşdirilməsi"
-            ],
-            "6.2 Performans İdarəetməsi": [
-                "Performans qiymətləndirmə sisteminin mövcudluğu",
-                "KPI və məqsədlərin müəyyənləşdirilməsi",
-                "Mütəmadi qiymətləndirmə proseslərinin həyata keçirilməsi",
-                "360 dərəcə qiymətləndirmə prosesləri",
-                "Performans improvement planlarının mövcudluğu",
-                "Performans və mükafat əlaqəsinin mövcudluğu"
-            ],
-            "6.3 Bonus və İnsentiv Proqramları": [
-                "Bonus siyasətinin mövcudluğu və aydınlığı",
-                "İllik bonus proqramlarının mövcudluğu",
-                "Layihə bonuslarının şərtləri",
-                "Təşviq proqramlarının mövcudluğu",
-                "Recognition proqramlarının həyata keçirilməsi",
-                "Təqaüd və mükafat sistemlərinin mövcudluğu"
-            ]
-        }
-    },
-    "7. Təlim və İnkişaf (L&D)": {
-        icon: "📚",
-        subcategories: {
-            "7.1 Təlim Proqramları": [
-                "İllik təlim planının mövcudluğu",
-                "Təlim ehtiyaclarının analizi (TNA)",
-                "Onboarding təlimlərinin keçirilməsi",
-                "Texniki təlimlərin təşkili",
-                "Soft skills təlimlərinin təşkili",
-                "Liderlik inkişaf proqramları",
-                "Compliance təlimlərinin keçirilməsi",
-                "Təlimlərin effektivliyinin qiymətləndirilməsi",
-                "Təlim büdcəsinin idarə edilməsi"
-            ],
-            "7.2 Karyera İnkişafı": [
-                "Karyera inkişaf planlarının mövcudluğu",
-                "Succession planning proseslərinin mövcudluğu",
-                "Mentorluq proqramlarının həyata keçirilməsi",
-                "Daxili mobilliyə dəstək",
-                "Talent management proqramları",
-                "İnkişaf mərkəzlərinin fəaliyyəti"
-            ]
-        }
-    },
-    "8. HR Sistemləri (HRIS)": {
-        icon: "💻",
-        subcategories: {
-            "8.1 HRIS Funksionallıq": [
-                "HRIS sisteminin mövcudluğu və funksionallığı",
-                "İşçi məlumatlarının tam və dəqiq olması",
-                "Sistem və faktiki məlumatların uyğunluğu",
-                "İş vaxtı uçotu modulunun işlərliyi",
-                "Payroll modulunun işlərliyi",
-                "Məzuniyyət idarəetmə modulunun işlərliyi",
-                "Performans idarəetmə modulunun mövcudluğu",
-                "Recruitment modulunun işlərliyi",
-                "Təlim idarəetmə sisteminin mövcudluğu"
-            ],
-            "8.2 Məlumat İntegriteti": [
-                "Məlumatların dəqiqliyi və aktuallaşdırılması",
-                "Təkrarlanan məlumatların yoxlanılması",
-                "Sistem backup proseslərinin mövcudluğu",
-                "Məlumat miqrasiyası proseslərinin düzgünlüyü",
-                "Sistem auditlərinin aparılması",
-                "Data cleaning proseslərinin həyata keçirilməsi"
-            ],
-            "8.3 Sistem Təhlükəsizliyi": [
-                "İstifadəçi giriş hüquqlarının idarə edilməsi",
-                "Parol siyasətlərinin mövcudluğu",
-                "Məlumat məxfiliyi təhlükəsizlik tədbirlərinin tətbiqi",
-                "Sistem loglarının saxlanılması",
-                "Kibertəhlükəsizlik tədbirlərinin tətbiqi",
-                "GDPR və məlumat mühafizəsi tələblərinə uyğunluq"
-            ],
-            "8.4 Sistem İnteqrasiyası": [
-                "ƏMAS (SİMA) ilə inteqrasiyanın işlərliyi",
-                "Uçot sistemləri ilə inteqrasiya",
-                "Bank sistemləri ilə əlaqələndirmə",
-                "SSİV (DOST) sistemi ilə inteqrasiya",
-                "E-imza sistemlərinin istifadəsi",
-                "Digər sistemlərlə API əlaqələri"
-            ]
-        }
-    },
-    "9. HR Analytics və Hesabatlar": {
-        icon: "📊",
-        subcategories: {
-            "9.1 HR Metrikləri": [
-                "Headcount hesabatlarının dəqiqliyi",
-                "Turnover rate hesablamalarının düzgünlüyü",
-                "Absenteeism metrikləri",
-                "Time to hire və time to fill metrikləri",
-                "Cost per hire hesablamaları",
-                "Training ROI hesablamaları",
-                "Employee engagement metrikləri",
-                "Diversity metrics"
-            ],
-            "9.2 Mütəmadi Hesabatlar": [
-                "Aylıq HR hesabatlarının hazırlanması",
-                "Rüblük analitik hesabatlar",
-                "İllik HR hesabatlar",
-                "SSİV hesabatlarının düzgün tərtib olunması",
-                "Vergi hesabatlarının vaxtında təqdim edilməsi",
-                "İstatistik hesabatların hazırlanması",
-                "Dövlət orqanlarına hesabatların vaxtında təqdim edilməsi"
-            ]
-        }
-    },
-    "10. İş Mühafizəsi və Təhlükəsizlik": {
-        icon: "🛡️",
-        subcategories: {
-            "10.1 İş Mühafizəsi": [
-                "İş mühafizəsi üzrə siyasətlərin mövcudluğu",
-                "İş mühafizəsi üzrə cavabdeh şəxslərin təyin edilməsi",
-                "İş yerlərinin attestasiyasının keçirilməsi",
-                "Risk qiymətləndirmənin aparılması",
-                "İlkin və periodik tibbi müayinələrin keçirilməsi",
-                "İş mühafizəsi təlimlərinin keçirilməsi",
-                "Fərdi mühafizə vasitələrinin təmin edilməsi",
-                "İş qəzalarının qeydiyyatı və araşdırılması",
-                "Peşə xəstəliklərinin profilaktikası"
-            ],
-            "10.2 Fövqəladə Hallar": [
-                "Təxliyə planlarının mövcudluğu",
-                "Yanğın təhlükəsizliyi təlimlərinin keçirilməsi",
-                "İlk yardım təlimlərinin keçirilməsi",
-                "Fövqəladə hallar üzrə əlaqə məlumatları",
-                "Krizis idarəetmə planlarının mövcudluğu"
-            ]
-        }
-    },
-    "11. Employee Engagement və Culture": {
-        icon: "🎭",
-        subcategories: {
-            "11.1 İşçi Məmnuniyyəti": [
-                "Employee engagement sorğularının keçirilməsi",
-                "Pulse survey-lərin mütəmadi aparılması",
-                "Exit interview məlumatlarının analizi",
-                "Stay interview proseslərinin həyata keçirilməsi",
-                "Şikayət mexanizminin effektivliyi",
-                "Employee Net Promoter Score (eNPS) ölçülməsi"
-            ],
-            "11.2 Təşkilati Mədəniyyət": [
-                "Korporativ dəyərlərin müəyyənləşdirilməsi",
-                "Dəyərlərin işçilərə çatdırılması",
-                "Team building tədbirlərinin təşkili",
-                "Korporativ tədbirlərin keçirilməsi",
-                "Daxili kommunikasiya kanallarının effektivliyi",
-                "Recognition proqramlarının fəaliyyəti"
-            ]
-        }
-    },
-    "12. Diversity, Equity & Inclusion (DEI)": {
-        icon: "🌈",
-        subcategories: {
-            "12.1 DEI Siyasətləri": [
-                "DEI siyasətinin mövcudluğu",
-                "Bərabər imkanlar siyasətinin tətbiqi",
-                "Anti-diskriminasiya siyasətlərinin mövcudluğu",
-                "Cinsi təcavüz və harassment siyasətləri",
-                "Əlillərin əmək hüquqlarının təmin edilməsi",
-                "Gender pay gap analizinin aparılması",
-                "DEI metrikləri və hesabatlar"
-            ]
-        }
-    },
-    "13. Vendor və Üçüncü Tərəf İdarəetməsi": {
-        icon: "🤝",
-        subcategories: {
-            "13.1 Vendor İdarəetməsi": [
-                "HR xidməti provayderləri ilə müqavilələr",
-                "Recruitment agentlikləri ilə əməkdaşlıq",
-                "Təlim provayderləri ilə müqavilələr",
-                "Payroll outsourcing müqavilələri (əgər varsa)",
-                "Background check provayderləri",
-                "Tibbi sığorta şirkətləri ilə müqavilələr",
-                "HRIS vendor idarəetməsi",
-                "SLA-ların yerinə yetirilməsinin monitorinqi"
-            ]
-        }
-    },
-    "14. Sənəd İdarəetməsi və Arxivləşdirmə": {
-        icon: "📁",
-        subcategories: {
-            "14.1 Sənəd İdarəetməsi": [
-                "Sənəd idarəetmə siyasətinin mövcudluğu",
-                "Şəxsi işlərin saxlanma qaydaları",
-                "Sənədlərin arxivləşdirilməsi",
-                "Sənədlərin məhv edilməsi qaydaları",
-                "Elektron sənəd dövriyyəsinin təşkili",
-                "Sənədlərə giriş hüquqlarının idarə edilməsi",
-                "Sənədlərin qorunması və təhlükəsizliyi",
-                "Sənəd saxlama müddətlərinə riayət edilməsi (75 il)"
-            ]
-        }
-    },
-    "15. Audit və Compliance Monitorinqi": {
-        icon: "✅",
-        subcategories: {
-            "15.1 Audit Prosesləri": [
-                "Daxili auditlərin mütəmadi aparılması",
-                "Xarici auditlərə hazırlıq",
-                "Compliance checklist-lərinin istifadəsi",
-                "Nöqsanların aradan qaldırılması planları",
-                "Əmək müfəttişliyinin yoxlamalarına hazırlıq",
-                "SSİV yoxlamalarına hazırlıq",
-                "Vergi orqanları yoxlamalarına hazırlıq",
-                "Audit tövsiyyələrinin icrasının izlənməsi"
-            ]
-        }
-    }
-};
-
-let auditItems = {};
-let currentItemId = null;
-let currentFilter = 'all';
-let categoryItemsMap = {};
-let itemIdMap = {}; // Item index -> Unique ID mapping
-
-// Unikal ID generatoru
-function generateUniqueId(category, subcategory, itemIndex) {
-    // Kateqoriya və alt-kateqoriyanın qısa versiyasını yarat
-    const catShort = category.replace(/[^a-zA-Z0-9]/g, '').substring(0, 10);
-    const subShort = subcategory.replace(/[^a-zA-Z0-9]/g, '').substring(0, 10);
-    return `HR-${catShort}-${subShort}-${itemIndex}`;
-}
-
-function init() {
-    renderCategories();
-    updateStats();
-    setupEventListeners();
-    loadAuditData();
-}
-
-function renderCategories() {
-    const container = document.getElementById('categoriesContainer');
-    container.innerHTML = '';
-    let globalItemIndex = 0;
-    
-    for (const [category, data] of Object.entries(auditData)) {
-        let totalItems = 0;
-        let subcategoriesHtml = '';
-        const categoryId = category.replace(/[^a-zA-Z0-9]/g, '_');
-        categoryItemsMap[categoryId] = [];
-        
-        let subcatIndex = 0;
-        for (const [subcategory, items] of Object.entries(data.subcategories)) {
-            totalItems += items.length;
-            let itemsHtml = '';
-            
-            items.forEach((item, localItemIndex) => {
-                const itemId = `item-${globalItemIndex}`;
-                const uniqueId = generateUniqueId(category, subcategory, localItemIndex);
-                itemIdMap[itemId] = uniqueId;
-                categoryItemsMap[categoryId].push(itemId);
-                
-                itemsHtml += `
-                    <div class="item" id="${itemId}" data-category="${category}" data-subcategory="${subcategory}" data-item="${item}" data-unique-id="${uniqueId}">
-                        <div class="item-main">
-                            <input type="checkbox" class="item-checkbox" onchange="toggleItem('${itemId}', '${categoryId}')">
-                            <div class="item-content">
-                                <div class="item-text" id="text-${itemId}">${item}</div>
-                                <div class="item-badges" id="badges-${itemId}"></div>
-                                <div class="notes-preview" id="notes-preview-${itemId}">
-                                    <div class="notes-preview-header">📝 QEYDLƏR:</div>
-                                    <div class="notes-preview-text" id="notes-text-${itemId}"></div>
-                                </div>
-                                <button class="btn btn-note" onclick="openNoteModal('${itemId}')">📝 Qeyd Əlavə Et</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                globalItemIndex++;
-            });
-            subcatIndex++;
-
-            subcategoriesHtml += `
-                <div class="subcategory">
-                    <div class="subcategory-header" onclick="toggleSubcategory(this)">
-                        <div class="subcategory-title">
-                            <div class="subcategory-icon">📂</div>
-                            <div class="subcategory-name">${subcategory}</div>
-                        </div>
-                        <div class="subcategory-count">${items.length}</div>
-                    </div>
-                    <div class="subcategory-body">${itemsHtml}</div>
-                </div>
-            `;
-        }
-
-        container.innerHTML += `
-            <div class="category-card" data-category-id="${categoryId}">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-info">
-                        <div class="category-icon">${data.icon}</div>
-                        <div class="category-text">
-                            <h3>${category}</h3>
-                            <span class="category-badge" id="badge-${categoryId}">0/${totalItems} maddə</span>
-                        </div>
-                    </div>
-                    <div class="category-right">
-                        <div class="category-progress">
-                            <div class="category-progress-bar">
-                                <div class="category-progress-fill" id="progress-${categoryId}" style="width: 0%"></div>
-                            </div>
-                            <div class="category-progress-text" id="progress-text-${categoryId}">0%</div>
-                        </div>
-                        <div class="category-toggle">▼</div>
-                    </div>
-                </div>
-                <div class="category-body">${subcategoriesHtml}</div>
-            </div>
-        `;
-    }
-}
-
-function toggleCategory(header) {
-    const body = header.nextElementSibling;
-    const icon = header.querySelector('.category-toggle');
-    body.classList.toggle('active');
-    icon.classList.toggle('active');
-}
-
-function toggleSubcategory(header) {
-    header.nextElementSibling.classList.toggle('active');
-}
-
-async function toggleItem(itemId, categoryId) {
-    const item = document.getElementById(itemId);
-    const checkbox = item.querySelector('.item-checkbox');
-    const isChecked = checkbox.checked;
-    const textEl = document.getElementById(`text-${itemId}`);
-    const uniqueId = item.dataset.uniqueId;
-    
-    // Strikethrough effekti
-    if (isChecked) {
-        item.classList.add('checked');
-        textEl.classList.add('completed');
-    } else {
-        item.classList.remove('checked');
-        textEl.classList.remove('completed');
-    }
-    
-    // Data-nı yenilə
-    if (!auditItems[itemId]) {
-        auditItems[itemId] = {
-            id: uniqueId,
-            category: item.dataset.category,
-            subcategory: item.dataset.subcategory,
-            item: item.dataset.item
+        const auditData = {
+            "1. HR Governance & Policies": { icon: "fa-scale-balanced", subcategories: { "1.1 Siyasət və Prosedurlar": ["HR siyasət və prosedurlarının mövcudluğu və aktuallaşdırılması","Daxili əmək qaydaları aktının mövcudluğu və qanunvericiliyə uyğunluğu","HR prosedurlarının sənədləşdirilməsi (recruitment, onboarding, offboarding)","Konfidensiallik və məxfilik siyasətlərinin mövcudluğu","Etik kodeksin mövcudluğu və işçilərə çatdırılması","Şikayət mexanizminin mövcudluğu və işlərliyi","Anti-korrupsiya və anti-rüşvətxorluq siyasətləri","Davranış qaydaları və intizam prosedurları"], "1.2 Struktur və Rollar": ["Təşkilati strukturun mövcudluğu və aktuallaşdırılması","Vəzifə təlimatlarının bütün vəzifələr üzrə mövcudluğu","Vəzifə təlimatlarının aktuallaşdırılması (son 2 il ərzində)","Səlahiyyət və məsuliyyət matrisinin mövcudluğu","HR departamentinin strukturu və resurslarının kifayətliyi","Rol və məsuliyyətlərin aydın müəyyənləşdirilməsi"], "1.3 Compliance və Risk İdarəetməsi": ["Əmək Məcəlləsi tələblərinə uyğunluq","SSİV (DOST) əlaqələrinin düzgünlüyü","Vergi qanunvericiliyinə uyğunluq","Məlumat mühafizəsi və GDPR tələblərinə uyğunluq","HR risk reyestrinin mövcudluğu","Daxili nəzarət mexanizmlərinin mövcudluğu","Xarici audit tövsiyyələrinin icrasının monitorinqi"]}},
+            "2. Recruitment & Onboarding": { icon: "fa-user-plus", subcategories: { "2.1 İşə Qəbul Prosesi": ["İşə qəbul prosedurlarının sənədləşdirilməsi","Vakansiya təsdiqləmə prosesinin mövcudluğu","İş elanlarının qanunvericiliyə uyğunluğu","Namizədlərin seçim meyarlarının mövcudluğu","Müsahibə prosesinin strukturlaşdırılması","Reference check prosesinin həyata keçirilməsi","Background check prosedurlarının mövcudluğu","Job offer məktublarının standartlaşdırılması","İşə qəbul qərarlarının sənədləşdirilməsi"], "2.2 Şəxsi İşlər və Sənədləşmə": ["Şəxsi işlərin tam komplektliyi","Ərizə və CV-nin mövcudluğu","Şəxsiyyət vəsiqəsinin surətinin mövcudluğu","Təhsil haqqında sənədlərin surətlərinin mövcudluğu","İxtisas sertifikatlarının mövcudluğu","Tibbi arayışın mövcudluğu","Əvvəlki iş yerlərindən əmək kitabçasının surəti","Foto şəkillərin mövcudluğu","Hərbi qulluqla bağlı sənədlərin mövcudluğu","Ailə vəziyyəti haqqında sənədlərin mövcudluğu","Bank rekvizitlərinin mövcudluğu","Konfidensiallik müqaviləsinin imzalanması","ƏMAS-a (SİMA) qeydiyyatın düzgünlüyü"], "2.3 Əmək Müqavilələri": ["Əmək müqavilələrinin yazılı formasının mövcudluğu","Müqavilələrin qanunvericiliyə uyğunluğu","Sınaq müddətinin düzgün tətbiqi","İş vəzifəsinin dəqiq göstərilməsi","Əmək haqqı məbləğinin düzgün əks olunması","İş saatlarının və iş rejiminin göstərilməsi","İş yerinin göstərilməsi","Müqavilə müddətinin göstərilməsi","Tərəflərin imzalarının mövcudluğu","İşçiyə nüsxənin təhvil verilməsi"], "2.4 Onboarding Prosesi": ["Onboarding proqramının mövcudluğu","Yeni işçilər üçün orientasiya təlimləri","İş yerinin hazırlanması","Mentor/buddy təyin edilməsi","İlk günlər üçün checklist-in mövcudluğu","Sınaq müddəti qiymətləndirmə prosesinin həyata keçirilməsi"]}},
+            "3. Əmək Münasibətləri": { icon: "fa-handshake", subcategories: { "3.1 Dəyişikliklər": ["Vəzifə dəyişikliklərinin rəsmiləşdirilməsi","Əlavə razılaşmaların uyğunluğu","Əmək haqqı dəyişikliklərinin sənədləşdirilməsi","İş yeri dəyişikliklərinin düzgünlüyü","İş rejimi dəyişikliklərinin rəsmiləşdirilməsi","Köçürmə əmrlərinin uyğunluğu","ƏMAS-da dəyişikliklərin əks olunması"], "3.2 İş Vaxtının Uçotu": ["İş vaxtı uçotunun aparılma forması","Faktiki iş saatlarının qeydiyyatı","Tabelin düzgün aparılması","Gec gəlmə/erkən çıxış qeydiyyatı","HRIS işlərliyi","İş vaxtı normalarına riayət","Gecə iş saatlarının uçotu","Bayram/istirahət günlərində işin uçotu"], "3.3 Növbəli İş": ["Növbə cədvəllərinin uyğunluğu","Cəmlənmiş iş vaxtı uçotu","Fasilələrin təmin edilməsi","Gecə növbələrinin uyğunluğu","Çoxnövbəli iş qrafiki","İşçilərin razılığının alınması","Növbə dəyişikliklərinin qeydiyyatı"], "3.4 İntizam": ["İntizam pozuntularının qeydiyyatı","İzahat məktublarının alınması","Töhmət əmrlərinin uyğunluğu","Şiddətli töhmət əsaslandırılması","Cəzaların proporsionallığı","Cəza müddətlərinin riayət edilməsi","Müdafiə hüququnun təmini","İntizam işlərinin sənədləşdirilməsi"], "3.5 Xitam": ["İşdən çıxarma əsaslarının qanunilliyi","Xəbərdarlıq müddətləri","İxtisar proseduraları","Ödənişlərin tam hesablanması","Məzuniyyət kompensasiyası","Çıxarma kartı","ƏMAS çıxarışı","Əmək kitabçası yazılışları","Exit interview","Offboarding checklist"]}},
+            "4. Məzuniyyətlər": { icon: "fa-umbrella-beach", subcategories: { "4.1 İllik Məzuniyyət": ["Planın tərtibi","Məzuniyyət hüququnun hesablanması","Ərizələrin rəsmiləşdirilməsi","Əmrlərin düzgünlüyü","Ödənişlərin hesablanması","3 gün əvvəl ödəniş","Min. 14 gün tələbi","İstifadə olunmamış günlərin uçotu","Kompensasiyaların hesablanması"], "4.2 Əlavə Məzuniyyət": ["Təhsil məzuniyyətləri","Hamiləlik və doğum","Uşaq baxımı","Ödənişsiz məzuniyyətlər","Qismən ödənişli sosial məzuniyyət","Digər sosial məzuniyyətlər"], "4.3 Xəstəlik": ["Xəstəlik vərəqələrinin tərtibi","Elektron sistemdə yoxlama","Vərəqələrin uçotu","Müavinətin hesablanması","SSİV kompensasiyası","Ödənişlərin düzgünlüyü"]}},
+            "5. Payroll": { icon: "fa-money-bill-1", subcategories: { "5.1 Sistemlər": ["Əmək haqqı siyasəti","Maaş strukturu","Grade/band sistemi","Minimum əmək haqqı","Artım prosedurları","Bonus sistemləri","Əlavə ödənişlər"], "5.2 Hesablamalar": ["Faktiki saatlara uyğunluq","Aylıq hesablamaların dəqiqliyi","Əlavə iş saatları ödənişi","Gecə saatları ödənişi","Bayram günü ödənişi","Növbəli qrafik ödənişi","Cəmlənmiş uçot ödənişi","Məzuniyyət ödənişi","Orta əmək haqqı","Xəstəlik müavinəti","Ezamiyyə ödənişi"], "5.3 Tutulmalar": ["Gəlir vergisi (14%)","SSİV (3%)","İşsizlik (0.5%)","İşəgötürən SSİV (22%)","İcra vərəqələri","Alimentlər","Avanslar","Digər qanuni tutulmalar"], "5.4 Proseslər": ["Payroll calendar","Ödəniş tarixləri","Paysliplərin verilməsi","Bank köçürmələri","Arxivləşdirmə","Məxfilik","Hesabatlar"], "5.5 Ezamiyyə": ["Əmrlərin tərtibi","Ezamiyyə vəsiqələri","Gündəlik ödənişlər","Yol xərcləri","Yaşayış xərcləri","Hesabatların təqdimi","Xarici ezamiyyətlər"]}},
+            "6. Benefits": { icon: "fa-gift", subcategories: { "6.1 Sosial Paket": ["Siyasətin mövcudluğu","Tibbi sığorta","Həyat sığortası","Pensiya proqramı","Nahar/nəqliyyat","Təhsil dəstəyi","İdman/wellness","Digər benefits"], "6.2 Performans": ["Qiymətləndirmə sistemi","KPI və məqsədlər","Mütəmadi qiymətləndirmə","360 dərəcə","Improvement plans","Performans-mükafat əlaqəsi"], "6.3 Bonuslar": ["Bonus siyasəti","İllik bonuslar","Layihə bonusları","Təşviq proqramları","Recognition","Təqaüd/mükafatlar"]}},
+            "7. Təlim (L&D)": { icon: "fa-graduation-cap", subcategories: { "7.1 Proqramlar": ["İllik plan","Ehtiyac analizi (TNA)","Onboarding təlimləri","Texniki təlimlər","Soft skills","Liderlik proqramları","Compliance təlimləri","Effektivlik qiymətləndirməsi","Büdcə idarəetməsi"], "7.2 Karyera": ["İnkişaf planları","Succession planning","Mentorluq","Daxili mobillik","Talent management","İnkişaf mərkəzləri"]}},
+            "8. HRIS": { icon: "fa-desktop", subcategories: { "8.1 Funksionallıq": ["Sistemin mövcudluğu","Məlumat dəqiqliyi","Faktiki uyğunluq","İş vaxtı modulu","Payroll modulu","Məzuniyyət modulu","Performans modulu","Recruitment modulu","Təlim modulu"], "8.2 İnteqritet": ["Məlumat aktuallığı","Təkrarlanma yoxlanışı","Backup prosesləri","Miqrasiya düzgünlüyü","Sistem auditləri","Data cleaning"], "8.3 Təhlükəsizlik": ["Giriş hüquqları","Parol siyasəti","Məxfilik tədbirləri","Logların saxlanması","Kibertəhlükəsizlik","GDPR uyğunluğu"], "8.4 İnteqrasiya": ["ƏMAS (SİMA)","Uçot sistemləri","Bank sistemləri","SSİV (DOST)","E-imza","API əlaqələri"]}},
+            "9. Analytics": { icon: "fa-chart-line", subcategories: { "9.1 Metriklər": ["Headcount","Turnover rate","Absenteeism","Time to hire/fill","Cost per hire","Training ROI","Engagement","Diversity"], "9.2 Hesabatlar": ["Aylıq hesabatlar","Rüblük analitika","İllik hesabatlar","SSİV hesabatlarının düzgün tərtib olunması","Vergi hesabatlarının vaxtında təqdim edilməsi","İstatistik hesabatların hazırlanması","Dövlət orqanlarına hesabatların vaxtında təqdim edilməsi"]}},
+            "10. SƏTƏM": { icon: "fa-helmet-safety", subcategories: { "10.1 İş Mühafizəsi": ["Siyasətlər","Cavabdeh şəxslər","Attestasiya","Risk qiymətləndirmə","Tibbi müayinələr","Təlimlər","Fərdi mühafizə","Qəza qeydiyyatı","Peşə xəstəlikləri"], "10.2 Fövqəladə": ["Təxliyə planları","Yanğın təhlükəsizliyi","İlk yardım","Əlaqə məlumatları","Krizis planı"]}},
+            "11. Engagement": { icon: "fa-heart", subcategories: { "11.1 Məmnuniyyət": ["Sorgular","Pulse surveys","Exit interview analizi","Stay interviews","Şikayət mexanizmi","eNPS"], "11.2 Mədəniyyət": ["Dəyərlər","Kommunikasiya","Team building","Tədbirlər","Daxili kanallar","Recognition"]}},
+            "12. DEI": { icon: "fa-people-group", subcategories: { "12.1 Siyasətlər": ["DEI siyasəti","Bərabər imkanlar","Anti-diskriminasiya","Harassment","Əlillik hüquqları","Gender pay gap","Metriklər"]}},
+            "13. Vendorlar": { icon: "fa-file-signature", subcategories: { "13.1 İdarəetmə": ["HR provayderləri","Recruitment agentlikləri","Təlim provayderləri","Payroll outsourcing","Background check","Sığorta şirkətləri","HRIS vendorları","SLA monitorinqi"]}},
+            "14. Sənədləşmə": { icon: "fa-folder-open", subcategories: { "14.1 İdarəetmə": ["Siyasət","Saxlanma qaydaları","Arxivləşdirmə","Məhv edilmə","Elektron dövriyyə","Giriş hüquqları","Təhlükəsizlik","Saxlama müddətləri"]}},
+            "15. Audit": { icon: "fa-list-check", subcategories: { "15.1 Monitorinq": ["Daxili audit","Xarici audit","Checklistlər","Nöqsan planları","Müfəttişlik hazırlığı","SSİV hazırlığı","Vergi hazırlığı","Tövsiyyə izlənməsi"]}}
         };
-    }
-    auditItems[itemId].checked = isChecked;
-    auditItems[itemId].status = isChecked ? 'completed' : 'pending';
-    auditItems[itemId].id = uniqueId;
-    
-    // Badges yenilə
-    updateBadges(itemId);
-    
-    saveAuditData();
-    updateStats();
-    updateCategoryProgress(categoryId);
-    
-    // Google Sheets-ə göndər (ID ilə)
-    await sendToGoogleSheets({
-        id: uniqueId,
-        category: auditItems[itemId].category,
-        subcategory: auditItems[itemId].subcategory,
-        item: auditItems[itemId].item,
-        status: auditItems[itemId].status,
-        notes: auditItems[itemId].notes || '',
-        responsible: auditItems[itemId].responsible || '',
-        priority: auditItems[itemId].priority || '',
-        dueDate: auditItems[itemId].dueDate || ''
-    });
-}
 
-function updateCategoryProgress(categoryId) {
-    const items = categoryItemsMap[categoryId] || [];
-    let checked = 0;
-    
-    items.forEach(itemId => {
-        const item = document.getElementById(itemId);
-        if (item && item.querySelector('.item-checkbox').checked) {
-            checked++;
+        let auditItems = {};
+        let currentItemId = null;
+
+        async function init() {
+            renderCategories();
+            await loadFromGoogleSheets();
+            Object.keys(auditData).forEach(cat => updateCategoryProgress(cat));
+            updateStats();
+            setupSearch();
         }
-    });
-    
-    const total = items.length;
-    const progress = total > 0 ? Math.round((checked / total) * 100) : 0;
-    
-    const progressBar = document.getElementById(`progress-${categoryId}`);
-    const progressText = document.getElementById(`progress-text-${categoryId}`);
-    const badge = document.getElementById(`badge-${categoryId}`);
-    
-    if (progressBar) progressBar.style.width = progress + '%';
-    if (progressText) progressText.textContent = progress + '%';
-    if (badge) badge.textContent = `${checked}/${total} maddə`;
-}
 
-function updateAllCategoryProgress() {
-    for (const categoryId of Object.keys(categoryItemsMap)) {
-        updateCategoryProgress(categoryId);
-    }
-}
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            let globalCounter = 1;
 
-function setFilter(filter, btn) {
-    currentFilter = filter;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    applyFilters();
-}
+            for (const [category, data] of Object.entries(auditData)) {
+                const safeCatId = category.replace(/[^a-zA-Z0-9]/g, '');
+                let catHTML = `
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="cat-left">
+                            <div class="category-icon-wrapper"><i class="fas ${data.icon}"></i></div>
+                            <div>
+                                <div class="category-title">${category}</div>
+                                <div class="category-badge">Kateqoriya</div>
+                            </div>
+                        </div>
+                        <div class="cat-right">
+                            <div class="cat-progress-container">
+                                <div class="cat-progress-bar"><div class="cat-progress-fill" id="prog-bar-${safeCatId}"></div></div>
+                                <div class="cat-progress-text" id="prog-text-${safeCatId}">0%</div>
+                            </div>
+                            <i class="fas fa-chevron-down category-toggle"></i>
+                        </div>
+                    </div>
+                    <div class="category-content">
+                `;
 
-function openNoteModal(itemId) {
-    currentItemId = itemId;
-    document.getElementById('noteModal').classList.add('active');
-    if (auditItems[itemId]) {
-        document.getElementById('itemStatus').value = auditItems[itemId].status || 'pending';
-        document.getElementById('itemNotes').value = auditItems[itemId].notes || '';
-        document.getElementById('responsiblePerson').value = auditItems[itemId].responsible || '';
-        document.getElementById('itemPriority').value = auditItems[itemId].priority || 'medium';
-        document.getElementById('itemDueDate').value = auditItems[itemId].dueDate || '';
-    } else {
-        document.getElementById('noteForm').reset();
-    }
-}
+                for (const [subcategory, items] of Object.entries(data.subcategories)) {
+                    catHTML += `
+                        <div class="subcategory">
+                            <div class="subcategory-header" onclick="toggleSubcategory(this)">
+                                <span>${subcategory}</span>
+                                <span class="subcategory-count">${items.length}</span>
+                            </div>
+                            <div class="subcategory-content">
+                    `;
+                    
+                    items.forEach(item => {
+                        const itemId = `item-${globalCounter}`;
+                        catHTML += `
+                            <div class="checklist-item" id="${itemId}" 
+                                 data-id="${globalCounter}"
+                                 data-category="${category}" 
+                                 data-subcategory="${subcategory}" 
+                                 data-item="${item}">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox" onchange="toggleItem('${itemId}')">
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-text"><span class="item-id">#${globalCounter}</span> <span class="item-main-text">${item}</span></div>
+                                    <div class="item-meta" id="meta-${itemId}"></div>
+                                    <div class="item-note-display" id="note-display-${itemId}">
+                                        <span class="item-note-label">Qeyd:</span>
+                                        <span id="note-text-${itemId}"></span>
+                                    </div>
+                                </div>
+                                <button class="btn-note" onclick="openNoteModal('${itemId}')">
+                                    <i class="fas fa-pen"></i> Qeyd
+                                </button>
+                            </div>
+                        `;
+                        globalCounter++;
+                    });
+                    catHTML += `</div></div>`;
+                }
+                catHTML += `</div></div>`;
+                container.innerHTML += catHTML;
+            }
+        }
 
-function closeModal() {
-    document.getElementById('noteModal').classList.remove('active');
-    currentItemId = null;
-}
+        async function loadFromGoogleSheets() {
+            const syncDiv = document.getElementById('syncStatus');
+            const syncText = document.getElementById('syncText');
+            syncDiv.classList.add('sync-loading');
+            syncText.innerText = "Yüklənir...";
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                const data = await response.json();
+                
+                data.forEach(row => {
+                    const itemId = `item-${row.id}`;
+                    const el = document.getElementById(itemId);
+                    
+                    if (el) {
+                        auditItems[itemId] = {
+                            id: row.id,
+                            category: row.category,
+                            subcategory: row.subcategory,
+                            item: row.item,
+                            status: row.status,
+                            responsible: row.responsible,
+                            priority: row.priority,
+                            dueDate: row.dueDate ? row.dueDate.split('T')[0] : '',
+                            notes: row.notes,
+                            checked: row.status === 'completed'
+                        };
 
-function setupEventListeners() {
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('noteForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        await saveNote();
-    });
-    document.getElementById('noteModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
-}
+                        el.querySelector('.checkbox').checked = (row.status === 'completed');
+                        updateItemUI(itemId);
+                    }
+                });
+                
+                syncDiv.classList.remove('sync-loading');
+                syncText.innerText = "Google Sheets Aktiv";
+                
+            } catch (error) {
+                console.error("Sync Error:", error);
+                syncDiv.classList.remove('sync-loading');
+                syncDiv.style.backgroundColor = 'var(--danger-bg)';
+                syncDiv.style.color = 'var(--danger-text)';
+                syncText.innerText = "Xəta: Sync Failed";
+            }
+        }
 
-async function saveNote() {
-    if (!currentItemId) return;
-    const item = document.getElementById(currentItemId);
-    const status = document.getElementById('itemStatus').value;
-    const isCompleted = status === 'completed';
-    const uniqueId = item.dataset.uniqueId;
-    
-    const checkbox = item.querySelector('.item-checkbox');
-    const textEl = document.getElementById(`text-${currentItemId}`);
-    
-    checkbox.checked = isCompleted;
-    if (isCompleted) {
-        item.classList.add('checked');
-        textEl.classList.add('completed');
-    } else {
-        item.classList.remove('checked');
-        textEl.classList.remove('completed');
-    }
-    
-    auditItems[currentItemId] = {
-        id: uniqueId,
-        category: item.dataset.category,
-        subcategory: item.dataset.subcategory,
-        item: item.dataset.item,
-        status: status,
-        notes: document.getElementById('itemNotes').value,
-        responsible: document.getElementById('responsiblePerson').value,
-        priority: document.getElementById('itemPriority').value,
-        dueDate: document.getElementById('itemDueDate').value,
-        checked: isCompleted
-    };
+        function updateItemUI(itemId) {
+            const el = document.getElementById(itemId);
+            const data = auditItems[itemId];
+            if(!el || !data) return;
 
-    const notes = auditItems[currentItemId].notes;
-    if (notes) {
-        item.classList.add('has-notes');
-        document.getElementById(`notes-preview-${currentItemId}`).classList.add('visible');
-        document.getElementById(`notes-text-${currentItemId}`).textContent = notes.length > 120 ? notes.substring(0, 120) + '...' : notes;
-    } else {
-        item.classList.remove('has-notes');
-        document.getElementById(`notes-preview-${currentItemId}`).classList.remove('visible');
-    }
+            if (data.checked) el.classList.add('checked'); else el.classList.remove('checked');
+            if (data.notes || (data.status && data.status !== 'pending')) el.classList.add('has-notes'); else el.classList.remove('has-notes');
 
-    updateBadges(currentItemId);
-    saveAuditData();
-    updateStats();
-    updateAllCategoryProgress();
-    
-    // Google Sheets-ə göndər (ID ilə)
-    await sendToGoogleSheets({
-        id: uniqueId,
-        category: auditItems[currentItemId].category,
-        subcategory: auditItems[currentItemId].subcategory,
-        item: auditItems[currentItemId].item,
-        status: auditItems[currentItemId].status,
-        notes: auditItems[currentItemId].notes || '',
-        responsible: auditItems[currentItemId].responsible || '',
-        priority: auditItems[currentItemId].priority || '',
-        dueDate: auditItems[currentItemId].dueDate || ''
-    });
-    
-    closeModal();
-}
+            updateMetaBadges(itemId);
 
-function updateBadges(itemId) {
-    const data = auditItems[itemId];
-    let html = '';
-    if (data?.status) {
-        const labels = {'completed':'✅ Tamamlandı','in-progress':'🔄 İcrada','pending':'⏳ Gözləyir','issue':'⚠️ Problem'};
-        html += `<span class="badge badge-status">${labels[data.status]}</span>`;
-    }
-    if (data?.responsible) html += `<span class="badge badge-person">👤 ${data.responsible}</span>`;
-    if (data?.priority && data.priority !== 'medium') {
-        const labels = {'low':'🟢 Aşağı','high':'🟠 Yüksək','critical':'🔴 Kritik'};
-        html += `<span class="badge badge-priority">${labels[data.priority]}</span>`;
-    }
-    document.getElementById(`badges-${itemId}`).innerHTML = html;
-}
+            const noteDisplay = document.getElementById(`note-display-${itemId}`);
+            const noteText = document.getElementById(`note-text-${itemId}`);
+            if (data.notes && data.notes.trim() !== '') {
+                noteDisplay.classList.add('visible');
+                noteText.innerText = data.notes;
+            } else {
+                noteDisplay.classList.remove('visible');
+                noteText.innerText = '';
+            }
+        }
 
-async function sendToGoogleSheets(data) {
-    document.getElementById('loadingOverlay').classList.add('active');
-    try {
-        await fetch(GOOGLE_SCRIPT_URL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(data) 
-        });
-        showNotification('Uğurlu!', 'Məlumat Google Sheets-ə göndərildi', 'success');
-    } catch (error) {
-        showNotification('Xəta!', 'Göndərilmə zamanı xəta baş verdi', 'error');
-    } finally {
-        document.getElementById('loadingOverlay').classList.remove('active');
-    }
-}
+        function toggleItem(itemId) {
+            const el = document.getElementById(itemId);
+            const checkbox = el.querySelector('.checkbox');
+            const isChecked = checkbox.checked;
+            const uniqueId = el.dataset.id;
 
-function saveAuditData() {
-    document.querySelectorAll('.item').forEach(item => {
-        const itemId = item.id;
-        const uniqueId = item.dataset.uniqueId;
-        
-        if (!auditItems[itemId]) {
-            auditItems[itemId] = { 
+            if(!auditItems[itemId]) auditItems[itemId] = {};
+            
+            auditItems[itemId].checked = isChecked;
+            auditItems[itemId].status = isChecked ? 'completed' : 'pending';
+
+            updateItemUI(itemId);
+            updateStats();
+            updateCategoryProgress(el.dataset.category);
+            saveAuditData();
+
+            sendToGoogleSheets({
+                id: String(uniqueId), 
+                category: el.dataset.category,
+                subcategory: el.dataset.subcategory,
+                item: el.dataset.item,
+                status: auditItems[itemId].status,
+                notes: auditItems[itemId].notes || '',
+                responsible: auditItems[itemId].responsible || '',
+                priority: auditItems[itemId].priority || '',
+                dueDate: auditItems[itemId].dueDate || ''
+            });
+        }
+
+        function openNoteModal(itemId) {
+            currentItemId = itemId;
+            const data = auditItems[itemId] || {};
+            document.getElementById('itemStatus').value = data.status || 'pending';
+            document.getElementById('itemNotes').value = data.notes || '';
+            document.getElementById('responsiblePerson').value = data.responsible || '';
+            document.getElementById('itemPriority').value = data.priority || 'medium';
+            document.getElementById('itemDueDate').value = data.dueDate || '';
+            document.getElementById('noteModal').classList.add('active');
+        }
+        function closeModal() { document.getElementById('noteModal').classList.remove('active'); currentItemId = null; }
+
+        document.getElementById('noteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if(!currentItemId) return;
+
+            const el = document.getElementById(currentItemId);
+            const uniqueId = el.dataset.id;
+            
+            const status = document.getElementById('itemStatus').value;
+            const notes = document.getElementById('itemNotes').value;
+            const responsible = document.getElementById('responsiblePerson').value;
+            const priority = document.getElementById('itemPriority').value;
+            const dueDate = document.getElementById('itemDueDate').value;
+            
+            let shouldCheck = (status === 'completed');
+            
+            auditItems[currentItemId] = {
                 id: uniqueId,
-                category: item.dataset.category, 
-                subcategory: item.dataset.subcategory, 
-                item: item.dataset.item, 
-                checked: item.querySelector('.item-checkbox').checked,
-                status: item.querySelector('.item-checkbox').checked ? 'completed' : 'pending'
+                category: el.dataset.category,
+                subcategory: el.dataset.subcategory,
+                item: el.dataset.item,
+                status, notes, responsible, priority, dueDate,
+                checked: shouldCheck
             };
-        } else {
-            auditItems[itemId].id = uniqueId;
-            auditItems[itemId].checked = item.querySelector('.item-checkbox').checked;
-            if (item.querySelector('.item-checkbox').checked) {
-                auditItems[itemId].status = 'completed';
-            }
+
+            el.querySelector('.checkbox').checked = shouldCheck;
+
+            updateItemUI(currentItemId);
+            updateStats();
+            updateCategoryProgress(el.dataset.category);
+            saveAuditData();
+            closeModal();
+            showNotification('Məlumat yadda saxlanılır...');
+
+            // HƏLL EDİLDİ: ID-ni String kimi göndəririk ki, Sheet tapsın
+            await sendToGoogleSheets({
+                id: String(uniqueId),
+                category: el.dataset.category,
+                subcategory: el.dataset.subcategory,
+                item: el.dataset.item,
+                status: status,
+                notes: notes,
+                responsible: responsible,
+                priority: priority,
+                dueDate: dueDate
+            });
+        });
+
+        function updateMetaBadges(id) { 
+            const d = auditItems[id]; 
+            const div = document.getElementById(`meta-${id}`); 
+            if(!d) { div.innerHTML=''; return; } 
+            let h = ''; 
+            let sC = 'status', sT = '';
+
+            if(d.status==='completed') { sT='✅ Tamamlandı'; sC='status'; }
+            else if(d.status==='in-progress') { sT='🔄 İcrada'; sC='status'; }
+            else if(d.status==='issue') { sT='⚠️ Problem'; sC='priority'; }
+            else if(d.status==='pending') { sT='⏳ Gözləyir'; sC='date'; }
+
+            if(d.status && d.status!=='pending') h+=`<span class="meta-badge ${sC}">${sT}</span>`; 
+            
+            if(d.responsible) h+=`<span class="meta-badge responsible"><i class="fas fa-user"></i> ${d.responsible}</span>`; 
+            if(d.priority && d.priority!=='medium') { 
+                const m={'low':'🟢 Aşağı','high':'🟠 Yüksək','critical':'🔴 Kritik'}; 
+                h+=`<span class="meta-badge priority">${m[d.priority]}</span>`; 
+            } 
+            if(d.dueDate) h+=`<span class="meta-badge date"><i class="fas fa-calendar"></i> ${d.dueDate}</span>`; 
+            div.innerHTML = h; 
         }
-    });
-    localStorage.setItem('auditData', JSON.stringify(auditItems));
-}
 
-function loadAuditData() {
-    const saved = localStorage.getItem('auditData');
-    if (saved) {
-        auditItems = JSON.parse(saved);
-        for (const [itemId, data] of Object.entries(auditItems)) {
-            const item = document.getElementById(itemId);
-            if (item) {
-                const checkbox = item.querySelector('.item-checkbox');
-                const textEl = document.getElementById(`text-${itemId}`);
-                
-                // ID-ni yenilə (əgər köhnə data-da yoxdursa)
-                if (!data.id) {
-                    data.id = item.dataset.uniqueId;
-                }
-                
-                checkbox.checked = data.checked;
-                
-                if (data.checked || data.status === 'completed') {
-                    item.classList.add('checked');
-                    textEl.classList.add('completed');
-                }
-                
-                if (data.notes) {
-                    item.classList.add('has-notes');
-                    document.getElementById(`notes-preview-${itemId}`)?.classList.add('visible');
-                    const previewText = document.getElementById(`notes-text-${itemId}`);
-                    if (previewText) previewText.textContent = data.notes.length > 120 ? data.notes.substring(0, 120) + '...' : data.notes;
-                }
-                updateBadges(itemId);
-            }
+        // Helpers
+        function toggleCategory(header) { header.nextElementSibling.classList.toggle('active'); header.querySelector('.category-toggle').classList.toggle('active'); }
+        function toggleSubcategory(header) { header.nextElementSibling.classList.toggle('active'); }
+        function updateCategoryProgress(cat) { const safe = cat.replace(/[^a-zA-Z0-9]/g, ''); const bar = document.getElementById(`prog-bar-${safe}`); const txt = document.getElementById(`prog-text-${safe}`); if(!bar) return; const items = document.querySelectorAll(`.checklist-item[data-category="${cat}"]`); let c = 0; items.forEach(i => { if(i.querySelector('.checkbox').checked) c++; }); const p = items.length ? Math.round((c/items.length)*100) : 0; bar.style.width = `${p}%`; txt.innerText = `${p}%`; }
+        function updateStats() { const all = document.querySelectorAll('.checklist-item'); let c=0, n=0; all.forEach(i => { if(i.classList.contains('checked')) c++; if(i.classList.contains('has-notes')) n++; }); const p = all.length ? Math.round((c/all.length)*100) : 0; document.getElementById('totalItems').innerText = all.length; document.getElementById('checkedItems').innerText = c; document.getElementById('withNotes').innerText = n; document.getElementById('progressPercent').innerText = p+'%'; document.getElementById('progressBar').style.width = p+'%'; }
+        function saveAuditData() { document.querySelectorAll('.checklist-item').forEach(el => { const id = el.id; if(!auditItems[id]) auditItems[id] = {}; auditItems[id].checked = el.querySelector('.checkbox').checked; }); localStorage.setItem('birbankFinalSyncFixed', JSON.stringify(auditItems)); }
+        function showNotification(m) { const n = document.getElementById('notification'); document.getElementById('notificationText').innerText = m; n.classList.add('active'); setTimeout(() => n.classList.remove('active'), 3000); }
+        
+        async function sendToGoogleSheets(data) { 
+            console.log("Göndərilən data:", data); // Debug üçün
+            try { 
+                await fetch(GOOGLE_SCRIPT_URL, { 
+                    method: 'POST', mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(data) 
+                }); 
+            } catch (e) { console.error(e); } 
         }
-        updateStats();
-        updateAllCategoryProgress();
-    }
-}
 
-function updateStats() {
-    const items = document.querySelectorAll('.item');
-    let checked = 0, withNotes = 0;
-    items.forEach(item => {
-        if (item.querySelector('.item-checkbox').checked) checked++;
-        if (item.classList.contains('has-notes')) withNotes++;
-    });
-    const progress = items.length > 0 ? Math.round((checked / items.length) * 100) : 0;
-    document.getElementById('statTotal').textContent = items.length;
-    document.getElementById('statChecked').textContent = checked;
-    document.getElementById('statNotes').textContent = withNotes;
-    document.getElementById('statProgress').textContent = progress + '%';
-    document.getElementById('progressBar').style.width = progress + '%';
-}
+        function setupSearch() { document.getElementById('searchInput').addEventListener('input', (e) => { const t = e.target.value.toLowerCase(); document.querySelectorAll('.checklist-item').forEach(i => { if(i.innerText.toLowerCase().includes(t)) { i.style.display='flex'; i.closest('.category-content').classList.add('active'); i.closest('.subcategory-content').classList.add('active'); } else { i.style.display='none'; } }); }); }
+        function filterItems(t) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); event.currentTarget.classList.add('active'); document.querySelectorAll('.checklist-item').forEach(i => { const c = i.classList.contains('checked'), n = i.classList.contains('has-notes'); if(t==='all') i.style.display='flex'; else if(t==='checked' && c) i.style.display='flex'; else if(t==='notes' && n) i.style.display='flex'; else i.style.display='none'; }); }
+        function exportToExcel() { let csv = '\uFEFFID,Kateqoriya,Alt Kateqoriya,Maddə,Status,Məsul,Prioritet,Tarix,Qeyd\n'; for(const [id, d] of Object.entries(auditItems)) { if(d.checked || d.notes) { const el = document.getElementById(id); const uid = el ? el.dataset.id : ''; csv += `"${uid}","${d.category}","${d.subcategory}","${d.item}","${d.status}","${d.responsible}","${d.priority}","${d.dueDate}","${(d.notes||'').replace(/"/g, '""')}"\n`; } } const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); link.download = 'Audit_Log.csv'; link.click(); }
 
-function applyFilters() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.item').forEach(item => {
-        const text = item.querySelector('.item-text').textContent.toLowerCase();
-        const isChecked = item.classList.contains('checked');
-        const hasNotes = item.classList.contains('has-notes');
-        let matchesSearch = text.includes(searchTerm);
-        let matchesFilter = currentFilter === 'all' || (currentFilter === 'checked' && isChecked) || (currentFilter === 'notes' && hasNotes);
-        item.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
-    });
-}
-
-function showNotification(title, text, type = 'success') {
-    const notification = document.getElementById('notification');
-    document.getElementById('notificationTitle').textContent = title;
-    document.getElementById('notificationText').textContent = text;
-    notification.className = 'notification active' + (type === 'error' ? ' error' : '');
-    setTimeout(() => notification.classList.remove('active'), 4000);
-}
-
-function exportToExcel() {
-    let csv = '\ufeffID,Kateqoriya,Alt Kateqoriya,Maddə,Status,Qeydlər,Məsul Şəxs,Prioritet,Son Tarix\n';
-    for (const [itemId, data] of Object.entries(auditItems)) {
-        if (data.checked || data.notes) {
-            csv += `"${data.id || ''}","${data.category}","${data.subcategory}","${data.item}","${data.status||''}","${data.notes||''}","${data.responsible||''}","${data.priority||''}","${data.dueDate||''}"\n`;
-        }
-    }
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-    link.download = `HR_Audit_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    showNotification('Uğurlu!', 'Excel faylı yükləndi', 'success');
-}
-
-window.addEventListener('DOMContentLoaded', init);
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
