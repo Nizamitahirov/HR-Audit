@@ -709,7 +709,7 @@
 
     <div class="header">
         <div class="container header-content">
-            <div class="brand"><i class="fas fa-briefcase"></i> Birbank | HR Diagnostics</div>
+            <div class="brand"><i class="fas fa-briefcase"></i> Birbank | HR Diagnosticst</div>
             <div class="sync-status" id="syncStatus">
                 <div class="sync-indicator"></div>
                 <span id="syncText">Google Sheets Aktiv</span>
@@ -817,23 +817,466 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyuTVkENzEskOgy7DAUor2G57Kq_c7lQ8Jte-HJB4LTUl-hGK8KRUw2eYbTGaDbuNeyAQ/exec';
 
         const auditData = {
-            "1. HR Governance & Policies": { icon: "fa-scale-balanced", subcategories: { "1.1 Siyasət və Prosedurlar": ["HR siyasət və prosedurlarının mövcudluğu və aktuallaşdırılması","Daxili əmək qaydaları aktının mövcudluğu və qanunvericiliyə uyğunluğu","HR prosedurlarının sənədləşdirilməsi (recruitment, onboarding, offboarding)","Konfidensiallik və məxfilik siyasətlərinin mövcudluğu","Etik kodeksin mövcudluğu və işçilərə çatdırılması","Şikayət mexanizminin mövcudluğu və işlərliyi","Anti-korrupsiya və anti-rüşvətxorluq siyasətləri","Davranış qaydaları və intizam prosedurları"], "1.2 Struktur və Rollar": ["Təşkilati strukturun mövcudluğu və aktuallaşdırılması","Vəzifə təlimatlarının bütün vəzifələr üzrə mövcudluğu","Vəzifə təlimatlarının aktuallaşdırılması (son 2 il ərzində)","Səlahiyyət və məsuliyyət matrisinin mövcudluğu","HR departamentinin strukturu və resurslarının kifayətliyi","Rol və məsuliyyətlərin aydın müəyyənləşdirilməsi"], "1.3 Compliance və Risk İdarəetməsi": ["Əmək Məcəlləsi tələblərinə uyğunluq","SSİV (DOST) əlaqələrinin düzgünlüyü","Vergi qanunvericiliyinə uyğunluq","Məlumat mühafizəsi və GDPR tələblərinə uyğunluq","HR risk reyestrinin mövcudluğu","Daxili nəzarət mexanizmlərinin mövcudluğu","Xarici audit tövsiyyələrinin icrasının monitorinqi"]}},
-            "2. Recruitment & Onboarding": { icon: "fa-user-plus", subcategories: { "2.1 İşə Qəbul Prosesi": ["İşə qəbul prosedurlarının sənədləşdirilməsi","Vakansiya təsdiqləmə prosesinin mövcudluğu","İş elanlarının qanunvericiliyə uyğunluğu","Namizədlərin seçim meyarlarının mövcudluğu","Müsahibə prosesinin strukturlaşdırılması","Reference check prosesinin həyata keçirilməsi","Background check prosedurlarının mövcudluğu","Job offer məktublarının standartlaşdırılması","İşə qəbul qərarlarının sənədləşdirilməsi"], "2.2 Şəxsi İşlər və Sənədləşmə": ["Şəxsi işlərin tam komplektliyi","Ərizə və CV-nin mövcudluğu","Şəxsiyyət vəsiqəsinin surətinin mövcudluğu","Təhsil haqqında sənədlərin surətlərinin mövcudluğu","İxtisas sertifikatlarının mövcudluğu","Tibbi arayışın mövcudluğu","Əvvəlki iş yerlərindən əmək kitabçasının surəti","Foto şəkillərin mövcudluğu","Hərbi qulluqla bağlı sənədlərin mövcudluğu","Ailə vəziyyəti haqqında sənədlərin mövcudluğu","Bank rekvizitlərinin mövcudluğu","Konfidensiallik müqaviləsinin imzalanması","ƏMAS-a (SİMA) qeydiyyatın düzgünlüyü"], "2.3 Əmək Müqavilələri": ["Əmək müqavilələrinin yazılı formasının mövcudluğu","Müqavilələrin qanunvericiliyə uyğunluğu","Sınaq müddətinin düzgün tətbiqi","İş vəzifəsinin dəqiq göstərilməsi","Əmək haqqı məbləğinin düzgün əks olunması","İş saatlarının və iş rejiminin göstərilməsi","İş yerinin göstərilməsi","Müqavilə müddətinin göstərilməsi","Tərəflərin imzalarının mövcudluğu","İşçiyə nüsxənin təhvil verilməsi"], "2.4 Onboarding Prosesi": ["Onboarding proqramının mövcudluğu","Yeni işçilər üçün orientasiya təlimləri","İş yerinin hazırlanması","Mentor/buddy təyin edilməsi","İlk günlər üçün checklist-in mövcudluğu","Sınaq müddəti qiymətləndirmə prosesinin həyata keçirilməsi"]}},
-            "3. Əmək Münasibətləri": { icon: "fa-handshake", subcategories: { "3.1 Dəyişikliklər": ["Vəzifə dəyişikliklərinin rəsmiləşdirilməsi","Əlavə razılaşmaların uyğunluğu","Əmək haqqı dəyişikliklərinin sənədləşdirilməsi","İş yeri dəyişikliklərinin düzgünlüyü","İş rejimi dəyişikliklərinin rəsmiləşdirilməsi","Köçürmə əmrlərinin uyğunluğu","ƏMAS-da dəyişikliklərin əks olunması"], "3.2 İş Vaxtının Uçotu": ["İş vaxtı uçotunun aparılma forması","Faktiki iş saatlarının qeydiyyatı","Tabelin düzgün aparılması","Gec gəlmə/erkən çıxış qeydiyyatı","HRIS işlərliyi","İş vaxtı normalarına riayət","Gecə iş saatlarının uçotu","Bayram/istirahət günlərində işin uçotu"], "3.3 Növbəli İş": ["Növbə cədvəllərinin uyğunluğu","Cəmlənmiş iş vaxtı uçotu","Fasilələrin təmin edilməsi","Gecə növbələrinin uyğunluğu","Çoxnövbəli iş qrafiki","İşçilərin razılığının alınması","Növbə dəyişikliklərinin qeydiyyatı"], "3.4 İntizam": ["İntizam pozuntularının qeydiyyatı","İzahat məktublarının alınması","Töhmət əmrlərinin uyğunluğu","Şiddətli töhmət əsaslandırılması","Cəzaların proporsionallığı","Cəza müddətlərinin riayət edilməsi","Müdafiə hüququnun təmini","İntizam işlərinin sənədləşdirilməsi"], "3.5 Xitam": ["İşdən çıxarma əsaslarının qanunilliyi","Xəbərdarlıq müddətləri","İxtisar proseduraları","Ödənişlərin tam hesablanması","Məzuniyyət kompensasiyası","Çıxarma kartı","ƏMAS çıxarışı","Əmək kitabçası yazılışları","Exit interview","Offboarding checklist"]}},
-            "4. Məzuniyyətlər": { icon: "fa-umbrella-beach", subcategories: { "4.1 İllik Məzuniyyət": ["Planın tərtibi","Məzuniyyət hüququnun hesablanması","Ərizələrin rəsmiləşdirilməsi","Əmrlərin düzgünlüyü","Ödənişlərin hesablanması","3 gün əvvəl ödəniş","Min. 14 gün tələbi","İstifadə olunmamış günlərin uçotu","Kompensasiyaların hesablanması"], "4.2 Əlavə Məzuniyyət": ["Təhsil məzuniyyətləri","Hamiləlik və doğum","Uşaq baxımı","Ödənişsiz məzuniyyətlər","Qismən ödənişli sosial məzuniyyət","Digər sosial məzuniyyətlər"], "4.3 Xəstəlik": ["Xəstəlik vərəqələrinin tərtibi","Elektron sistemdə yoxlama","Vərəqələrin uçotu","Müavinətin hesablanması","SSİV kompensasiyası","Ödənişlərin düzgünlüyü"]}},
-            "5. Payroll": { icon: "fa-money-bill-1", subcategories: { "5.1 Sistemlər": ["Əmək haqqı siyasəti","Maaş strukturu","Grade/band sistemi","Minimum əmək haqqı","Artım prosedurları","Bonus sistemləri","Əlavə ödənişlər"], "5.2 Hesablamalar": ["Faktiki saatlara uyğunluq","Aylıq hesablamaların dəqiqliyi","Əlavə iş saatları ödənişi","Gecə saatları ödənişi","Bayram günü ödənişi","Növbəli qrafik ödənişi","Cəmlənmiş uçot ödənişi","Məzuniyyət ödənişi","Orta əmək haqqı","Xəstəlik müavinəti","Ezamiyyə ödənişi"], "5.3 Tutulmalar": ["Gəlir vergisi (14%)","SSİV (3%)","İşsizlik (0.5%)","İşəgötürən SSİV (22%)","İcra vərəqələri","Alimentlər","Avanslar","Digər qanuni tutulmalar"], "5.4 Proseslər": ["Payroll calendar","Ödəniş tarixləri","Paysliplərin verilməsi","Bank köçürmələri","Arxivləşdirmə","Məxfilik","Hesabatlar"], "5.5 Ezamiyyə": ["Əmrlərin tərtibi","Ezamiyyə vəsiqələri","Gündəlik ödənişlər","Yol xərcləri","Yaşayış xərcləri","Hesabatların təqdimi","Xarici ezamiyyətlər"]}},
-            "6. Benefits": { icon: "fa-gift", subcategories: { "6.1 Sosial Paket": ["Siyasətin mövcudluğu","Tibbi sığorta","Həyat sığortası","Pensiya proqramı","Nahar/nəqliyyat","Təhsil dəstəyi","İdman/wellness","Digər benefits"], "6.2 Performans": ["Qiymətləndirmə sistemi","KPI və məqsədlər","Mütəmadi qiymətləndirmə","360 dərəcə","Improvement plans","Performans-mükafat əlaqəsi"], "6.3 Bonuslar": ["Bonus siyasəti","İllik bonuslar","Layihə bonusları","Təşviq proqramları","Recognition","Təqaüd/mükafatlar"]}},
-            "7. Təlim (L&D)": { icon: "fa-graduation-cap", subcategories: { "7.1 Proqramlar": ["İllik plan","Ehtiyac analizi (TNA)","Onboarding təlimləri","Texniki təlimlər","Soft skills","Liderlik proqramları","Compliance təlimləri","Effektivlik qiymətləndirməsi","Büdcə idarəetməsi"], "7.2 Karyera": ["İnkişaf planları","Succession planning","Mentorluq","Daxili mobillik","Talent management","İnkişaf mərkəzləri"]}},
-            "8. HRIS": { icon: "fa-desktop", subcategories: { "8.1 Funksionallıq": ["Sistemin mövcudluğu","Məlumat dəqiqliyi","Faktiki uyğunluq","İş vaxtı modulu","Payroll modulu","Məzuniyyət modulu","Performans modulu","Recruitment modulu","Təlim modulu"], "8.2 İnteqritet": ["Məlumat aktuallığı","Təkrarlanma yoxlanışı","Backup prosesləri","Miqrasiya düzgünlüyü","Sistem auditləri","Data cleaning"], "8.3 Təhlükəsizlik": ["Giriş hüquqları","Parol siyasəti","Məxfilik tədbirləri","Logların saxlanması","Kibertəhlükəsizlik","GDPR uyğunluğu"], "8.4 İnteqrasiya": ["ƏMAS (SİMA)","Uçot sistemləri","Bank sistemləri","SSİV (DOST)","E-imza","API əlaqələri"]}},
-            "9. Analytics": { icon: "fa-chart-line", subcategories: { "9.1 Metriklər": ["Headcount","Turnover rate","Absenteeism","Time to hire/fill","Cost per hire","Training ROI","Engagement","Diversity"], "9.2 Hesabatlar": ["Aylıq hesabatlar","Rüblük analitika","İllik hesabatlar","SSİV hesabatlarının düzgün tərtib olunması","Vergi hesabatlarının vaxtında təqdim edilməsi","İstatistik hesabatların hazırlanması","Dövlət orqanlarına hesabatların vaxtında təqdim edilməsi"]}},
-            "10. SƏTƏM": { icon: "fa-helmet-safety", subcategories: { "10.1 İş Mühafizəsi": ["Siyasətlər","Cavabdeh şəxslər","Attestasiya","Risk qiymətləndirmə","Tibbi müayinələr","Təlimlər","Fərdi mühafizə","Qəza qeydiyyatı","Peşə xəstəlikləri"], "10.2 Fövqəladə": ["Təxliyə planları","Yanğın təhlükəsizliyi","İlk yardım","Əlaqə məlumatları","Krizis planı"]}},
-            "11. Engagement": { icon: "fa-heart", subcategories: { "11.1 Məmnuniyyət": ["Sorgular","Pulse surveys","Exit interview analizi","Stay interviews","Şikayət mexanizmi","eNPS"], "11.2 Mədəniyyət": ["Dəyərlər","Kommunikasiya","Team building","Tədbirlər","Daxili kanallar","Recognition"]}},
-            "12. DEI": { icon: "fa-people-group", subcategories: { "12.1 Siyasətlər": ["DEI siyasəti","Bərabər imkanlar","Anti-diskriminasiya","Harassment","Əlillik hüquqları","Gender pay gap","Metriklər"]}},
-            "13. Vendorlar": { icon: "fa-file-signature", subcategories: { "13.1 İdarəetmə": ["HR provayderləri","Recruitment agentlikləri","Təlim provayderləri","Payroll outsourcing","Background check","Sığorta şirkətləri","HRIS vendorları","SLA monitorinqi"]}},
-            "14. Sənədləşmə": { icon: "fa-folder-open", subcategories: { "14.1 İdarəetmə": ["Siyasət","Saxlanma qaydaları","Arxivləşdirmə","Məhv edilmə","Elektron dövriyyə","Giriş hüquqları","Təhlükəsizlik","Saxlama müddətləri"]}},
-            "15. Audit": { icon: "fa-list-check", subcategories: { "15.1 Monitorinq": ["Daxili audit","Xarici audit","Checklistlər","Nöqsan planları","Müfəttişlik hazırlığı","SSİV hazırlığı","Vergi hazırlığı","Tövsiyyə izlənməsi"]}},
-            "16. Fəaliyyətin dəyərləndirilməsi və karyera inkişafı": { icon: "fa-list-check", subcategories: { "15.1 Fəaliyyətin dəyərləndirilməsi və karyera inkişafı": ["Davranış kompetensiyaları üzrə qiymətləndirmə","Texniki bacarıqlar üzrə qiymətləndirmə","Karyera inkişafı modeli (non-agile / agile)","Mükafatlandırma","Feedback mədəniyyəti"]}}
-        };
+    "1. HR İdarəetməsi və Siyasətlər": { 
+        icon: "fa-scale-balanced", 
+        subcategories: { 
+            "1.1 Siyasət və Prosedurlar": [
+                "İnsan resursları siyasət və prosedurlarının şirkətdə mövcudluğu və bunların mütəmadi olaraq yenilənməsi",
+                "Daxili əmək qaydaları haqqında aktın mövcudluğu və qüvvədə olan qanunvericiliyə uyğunluğunun təmin edilməsi",
+                "İşə qəbul, yeni işçilərin adaptasiyası və işdən çıxma prosedurlarının yazılı şəkildə sənədləşdirilməsi",
+                "Konfidensial və məxfi məlumatların qorunması ilə bağlı siyasətlərin mövcudluğu",
+                "Etik davranış kodeksinin hazırlanması və bütün işçilərə çatdırılmasının təmin edilməsi",
+                "İşçilərin şikayətlərinin qəbulu və həlli mexanizminin mövcudluğu və effektiv işləməsi",
+                "Korrupsiyaya və rüşvətxorluğa qarşı mübarizə siyasətlərinin tətbiqi",
+                "İşçilərin davranış qaydaları və intizam pozuntularının araşdırılması prosedurlarının olması"
+            ], 
+            "1.2 Təşkilati Struktur və Vəzifə Rolları": [
+                "Şirkətin təşkilati strukturunun mövcudluğu və mütəmadi olaraq yenilənməsi",
+                "Bütün vəzifələr üzrə vəzifə təlimatlarının (job description) hazırlanmış olması",
+                "Vəzifə təlimatlarının son 2 il ərzində yenilənməsi və aktuallaşdırılması",
+                "Səlahiyyət və məsuliyyətlərin bölgüsü matrisinin (RACI matrix) mövcudluğu",
+                "İnsan Resursları departamentinin strukturunun və resurslarının kifayət etməsi",
+                "Hər bir rol üzrə məsuliyyətlərin aydın və dəqiq müəyyənləşdirilməsi"
+            ], 
+            "1.3 Qanunvericiliyə Uyğunluq və Risk İdarəetməsi": [
+                "Azərbaycan Respublikasının Əmək Məcəlləsi tələblərinə tam uyğunluq",
+                "Sosial Sığorta və İşsizliyə qarşı Sığorta üzrə Vahid İnformasiya Sistemi (DOST) ilə əlaqələrin düzgünlüyü",
+                "Vergi qanunvericiliyinə uyğunluq və vaxtında vergi ödənişlərinin həyata keçirilməsi",
+                "Şəxsi məlumatların mühafizəsi və GDPR (ümumi məlumat mühafizəsi) tələblərinə uyğunluq",
+                "İnsan resursları sahəsində risk reyestrinin (risk qeydiyyat kitabının) mövcudluğu",
+                "Daxili nəzarət və monitorinq mexanizmlərinin qurulması və fəaliyyəti",
+                "Xarici audit zamanı verilən tövsiyyələrin icrasının izlənilməsi və monitorinqi"
+            ]
+        }
+    },
+    "2. İşə Qəbul və Adaptasiya": { 
+        icon: "fa-user-plus", 
+        subcategories: { 
+            "2.1 İşə Qəbul Prosesi": [
+                "İşə qəbul prosedurlarının addım-addım yazılı şəkildə sənədləşdirilməsi",
+                "Yeni vakansiyaların açılması və təsdiqləmə prosesinin olması",
+                "İş elanlarının məzmununun Əmək Məcəlləsinə və diskriminasiya qadağalarına uyğunluğu",
+                "Namizədlərin qiymətləndirilməsi və seçilməsi üçün aydın meyarların müəyyənləşdirilməsi",
+                "Müsahibə prosesinin strukturlaşdırılması və standartlaşdırılması",
+                "Namizədlərin əvvəlki iş yerlərindən tövsiyələrin yoxlanılması (reference check)",
+                "Namizədlərin keçmişinin yoxlanılması prosedurlarının (background check) həyata keçirilməsi",
+                "İş təklifi məktublarının (job offer letter) standart formasının olması",
+                "İşə qəbul qərarlarının və əsaslandırmalarının yazılı şəkildə sənədləşdirilməsi"
+            ], 
+            "2.2 Şəxsi İşlər və Zəruri Sənədləşmə": [
+                "Hər bir işçinin şəxsi işinin tam komplekt sənədlərlə təmin edilməsi",
+                "İşə qəbul ərizəsi və tərcümeyi-hal (CV) sənədlərinin mövcudluğu",
+                "Şəxsiyyət vəsiqəsinin (ID kart) notariat təsdiqli və ya sadə surətinin olması",
+                "Təhsil haqqında diplomların və sertifikatların surətlərinin toplanması",
+                "Peşə ixtisası və əlavə təlim sertifikatlarının şəxsi işdə saxlanılması",
+                "İşə qəbul zamanı tibbi müayinədən keçmə haqqında arayışın alınması",
+                "Əvvəlki iş yerlərindən əmək kitabçası surətinin və ya çıxarışın olması",
+                "3x4 ölçülü foto şəkillərin (adətən 2-4 ədəd) toplanması",
+                "Kişi işçilər üçün hərbi qulluqla bağlı sənədlərin (hərbi bilet və s.) mövcudluğu",
+                "Ailə vəziyyəti haqqında sənədlərin (nikah şəhadətnaməsi, uşaq doğum haqqında şəhadətnamə) surətləri",
+                "Əmək haqqının köçürülməsi üçün bank hesab rekvizitlərinin əldə edilməsi",
+                "Məxfilik və konfidensiallik müqaviləsinin (NDA) işçi tərəfindən imzalanması",
+                "Elektron Əmək Müqaviləsi Aparat Sisteminə (SİMA) düzgün qeydiyyatın aparılması"
+            ], 
+            "2.3 Əmək Müqavilələrinin Tərtib Edilməsi": [
+                "Bütün əmək münasibətlərinin yazılı əmək müqaviləsi formasında rəsmiləşdirilməsi",
+                "Əmək müqavilələrinin Əmək Məcəlləsi tələblərinə tam uyğunluğunun təmin edilməsi",
+                "Sınaq müddətinin (adətən 3 aya qədər) qanuni şəkildə tətbiqi və müqavilədə qeyd edilməsi",
+                "İşçinin tutacağı vəzifənin dəqiq və aydın şəkildə göstərilməsi",
+                "Əmək haqqı məbləğinin (brutto və ya netto) dəqiq rəqəmlərlə əks olunması",
+                "İş saatları və iş rejiminin (iş günlərinin başlama və bitmə vaxtı) müəyyənləşdirilməsi",
+                "İşçinin işləyəcəyi iş yerinin (ünvan və ya struktur bölmə) göstərilməsi",
+                "Müqavilənin müddətsiz və ya müəyyən müddətli olduğunun qeyd edilməsi",
+                "Müqavilənin hər iki tərəf (işəgötürən və işçi) tərəfindən imzalanması",
+                "İmzalanmış əmək müqaviləsinin bir nüsxəsinin işçiyə təhvil verilməsi və qəbz alınması"
+            ], 
+            "2.4 Yeni İşçilərin Adaptasiya Prosesi": [
+                "Yeni işçilər üçün strukturlaşdırılmış adaptasiya (onboarding) proqramının hazırlanması",
+                "Yeni işçilər üçün orientasiya (şirkətin tanıdılması) təlimlərinin keçirilməsi",
+                "Yeni işçinin gəlişindən əvvəl iş yerinin, kompüterin və digər avadanlıqların hazırlanması",
+                "Yeni işçiyə mentor və ya buddy (köməkçi həmkar) təyin edilməsi",
+                "İlk iş günləri və həftələr üçün izlənməli olan addımların siyahısı (checklist) mövcudluğu",
+                "Sınaq müddəti bitənə qədər performansın qiymətləndirilməsi prosesinin həyata keçirilməsi"
+            ]
+        }
+    },
+    "3. Əmək Münasibətlərinin İdarə Edilməsi": { 
+        icon: "fa-handshake", 
+        subcategories: { 
+            "3.1 Əmək Şərtlərində Dəyişikliklər": [
+                "İşçinin vəzifəsində dəyişikliklərin əlavə razılaşma və ya yeni müqavilə ilə rəsmiləşdirilməsi",
+                "Əmək müqaviləsinə əlavə razılaşmaların (addendum) qanunvericiliyə uyğun tərtib edilməsi",
+                "Əmək haqqında dəyişikliklərin yazılı sənədlərlə təsdiqlənməsi və işçiyə bildirilməsi",
+                "İşçinin iş yerinin (ünvan, struktur) dəyişdirilməsinin düzgün prosedurla həyata keçirilməsi",
+                "İş rejimi və iş saatlarında dəyişikliklərin qanuni əsaslarla rəsmiləşdirilməsi",
+                "İşçinin başqa struktur bölməyə və ya vəzifəyə köçürülməsi əmrlərinin uyğunluğu",
+                "Bütün dəyişikliklərin Elektron Əmək Müqaviləsi Aparat Sistemində (ƏMAS) əks etdirilməsi"
+            ], 
+            "3.2 İş Vaxtının Uçotu və Qeydiyyatı": [
+                "İş vaxtının uçotu formasının (saat, gün, həftə) müəyyənləşdirilməsi və tətbiqi",
+                "Hər bir işçinin faktiki işlədiyi saatların dəqiq qeydiyyata alınması",
+                "Aylıq iş vaxtı tabelinin (timesheet) düzgün və vaxtında tərtib edilməsi",
+                "İşçilərin gec gəlmə, erkən çıxma hallarının qeydiyyatı və uçotu",
+                "İnsan Resursları İnformasiya Sisteminin (HRIS) işləkliyinin və dəqiqliyinin təmin edilməsi",
+                "Günlük, həftəlik və aylıq iş vaxtı normalarına riayətin monitorinqi",
+                "Gecə saatlarında (saat 22:00-dan 06:00-dək) işləmə hallarının ayrıca uçotu",
+                "Bayram və istirahət günlərində işləmə hallarının qeydiyyatı və əlavə ödəniş hesablanması"
+            ], 
+            "3.3 Növbəli İş Rejimi": [
+                "Növbə cədvəllərinin əvvəlcədən tərtib edilməsi və Əmək Məcəlləsinə uyğunluğu",
+                "Cəmlənmiş (summed) iş vaxtı uçotunun düzgün aparılması",
+                "İş vaxtı ərzində fasilələrin (nahar, istirahət) qanuni tələblərə uyğun təmin edilməsi",
+                "Gecə növbələrinin müddəti və tezliyinin qanunvericiliyə uyğunluğunun yoxlanılması",
+                "İki və ya daha çox növbəli iş qrafikinin düzgün təşkili",
+                "Növbəli iş rejimi üçün işçilərin yazılı razılığının alınması",
+                "Növbə cədvəlində dəyişikliklərin vaxtında qeydiyyatı və işçilərə bildirilməsi"
+            ], 
+            "3.4 İntizam Məsuliyyəti": [
+                "İşçilərin intizam pozuntularının yazılı şəkildə qeydə alınması və sənədləşdirilməsi",
+                "İntizam pozuntusu ilə bağlı işçidən yazılı izahat məktubunun tələb edilməsi və alınması",
+                "İntizam töhmət əmrlərinin Əmək Məcəlləsinə uyğun tərtib edilməsi",
+                "Ağır intizam pozuntusunun əsaslandırılması və sübutlarla təsdiq edilməsi",
+                "Tətbiq olunan intizam cəzalarının pozuntuya proporsional (mütənasib) olması",
+                "İntizam cəzalarının tətbiqi üçün müəyyən edilmiş müddətlərə riayət edilməsi",
+                "İşçinin özünü müdafiə etmək hüququnun təmin edilməsi və dinlənilməsi",
+                "İntizam tədbirlərinin bütün mərhələlərinin ətraflı sənədləşdirilməsi və arxivləşdirilməsi"
+            ], 
+            "3.5 Əmək Müqaviləsinin Xitamı": [
+                "İşdən çıxarma əsaslarının qanuniliyi və Əmək Məcəlləsinə uyğunluğunun təmin edilməsi",
+                "Əmək müqaviləsini ləğv edərkən qanuni xəbərdarlıq müddətlərinə riayət edilməsi",
+                "İşçi sayının azaldılması (ixtisarı) proseduralarının düzgün həyata keçirilməsi",
+                "İşdən çıxan işçiyə aid olan bütün ödənişlərin tam hesablanması və ödənilməsi",
+                "İstifadə olunmamış illik məzuniyyət günləri üzrə kompensasiyanın hesablanması və ödənilməsi",
+                "İşdən çıxarma zamanı işçiyə çıxarma kartının (xidməti vərəqənin) verilməsi",
+                "Sosial Sığorta sistemindən çıxarış (məlumat) sənədinin hazırlanması",
+                "Əmək kitabçasına düzgün yazılışların aparılması və ya elektron qeydlərin edilməsi",
+                "İşdən çıxan işçi ilə çıxış müsahibəsinin (exit interview) keçirilməsi",
+                "İşdən çıxma zamanı yerinə yetiriləcək bütün addımların siyahısı (offboarding checklist) əsasında prosedurların tamamlanması"
+            ]
+        }
+    },
+    "4. Məzuniyyətlərin İdarə Edilməsi": { 
+        icon: "fa-umbrella-beach", 
+        subcategories: { 
+            "4.1 İllik Ödənişli Məzuniyyət": [
+                "İllik məzuniyyət planının (cədvəlinin) əvvəlcədən tərtib edilməsi",
+                "Hər bir işçinin məzuniyyət hüququnun (günlərinin) düzgün hesablanması",
+                "Məzuniyyətə gedərkən işçidən ərizənin alınması və rəsmiləşdirilməsi",
+                "Məzuniyyət əmrlərinin (buyruqlarının) Əmək Məcəlləsinə uyğun tərtib edilməsi",
+                "Məzuniyyət ödənişinin düzgün hesablanması (son 12 ayın orta əmək haqqı əsasında)",
+                "Məzuniyyət ödənişinin məzuniyyətdən ən azı 3 gün əvvəl işçiyə ödənilməsi",
+                "İllik məzuniyyətin minimum 14 təqvim günü müddətində fasiləsiz verilməsi tələbinə riayət",
+                "İstifadə olunmamış məzuniyyət günlərinin uçotu və ötürülməsi qaydalarına əməl edilməsi",
+                "İşdən çıxarkən istifadə olunmamış məzuniyyət üzrə kompensasiyaların hesablanması"
+            ], 
+            "4.2 Əlavə və Sosial Məzuniyyətlər": [
+                "Təhsil məzuniyyətlərinin (imtahan sessiyası üçün) verilməsi və rəsmiləşdirilməsi",
+                "Hamiləlik və doğum məzuniyyətlərinin qanuni müddətlərdə (126 təqvim günü) təmin edilməsi",
+                "Uşağa qulluq üçün məzuniyyətlərin (3 yaşa qədər) verilməsi və sənədləşdirilməsi",
+                "İşçilərin müraciəti əsasında ödənişsiz məzuniyyətlərin verilməsi prosedurları",
+                "Qismən ödənişli sosial məzuniyyətlərin (məsələn, ailə üzvünün xəstəliyi zamanı) təmin edilməsi",
+                "Digər qanunla nəzərdə tutulmuş sosial məzuniyyətlərin (yas məzuniyyəti, toy məzuniyyəti və s.) verilməsi"
+            ], 
+            "4.3 Xəstəlik üzrə Müvəqqəti Əmək Qabiliyyətinin İtirilməsi": [
+                "Xəstəlik vərəqələrinin (müalicə müəssisəsi tərəfindən) düzgün tərtib edilməsi",
+                "Xəstəlik vərəqələrinin elektron sistemdə (e-tibb.gov.az) yoxlanılması və təsdiqlənməsi",
+                "Alınmış xəstəlik vərəqələrinin qeydiyyatı və uçota alınması",
+                "Xəstəlik üzrə müavinətin (kompensasiyanın) düzgün hesablanması",
+                "Sosial Sığorta və İşsizliyə qarşı Sığorta Fondundan kompensasiyanın alınması prosedurları",
+                "Xəstəlik müavinətlərinin vaxtında və düzgün məbləğdə işçiyə ödənilməsi"
+            ]
+        }
+    },
+    "5. Əmək Haqqı İdarəetməsi (Payroll)": { 
+        icon: "fa-money-bill-1", 
+        subcategories: { 
+            "5.1 Əmək Haqqı Sistemləri": [
+                "Şirkətdə əmək haqqı siyasətinin yazılı şəkildə mövcudluğu",
+                "Əmək haqqı strukturunun (əsas maaş, əlavələr, bonuslar) aydın müəyyənləşdirilməsi",
+                "Vəzifə dərəcələndirmə sisteminin (grade/band system) tətbiqi",
+                "Azərbaycan Respublikasında müəyyən edilmiş minimum əmək haqqı tələbinə riayət",
+                "Əmək haqqında artım prosedurlarının (maaş revision) mövcudluğu və tətbiqi",
+                "Bonus və mükafatlandırma sistemlərinin aydın meyarlarla işləməsi",
+                "Əlavə ödənişlərin (allowances) növlərinin və məbləğlərinin müəyyənləşdirilməsi"
+            ], 
+            "5.2 Əmək Haqqı Hesablamaları": [
+                "Əmək haqqının faktiki işlənilmiş saatlara uyğun hesablanması",
+                "Aylıq əmək haqqı hesablamalarının dəqiqliyi və vaxtında aparılması",
+                "Əlavə iş saatları (overtime) üzrə ödənişlərin düzgün hesablanması və ödənilməsi",
+                "Gecə saatlarında (22:00-06:00) işləmə üzrə əlavə ödənişin (20% artıq) hesablanması",
+                "Bayram və qeyri-iş günlərində işləmə üçün ödənişin (ikiqat) hesablanması",
+                "Növbəli iş qrafikində çalışan işçilər üçün ödənişin düzgün hesablanması",
+                "Cəmlənmiş iş vaxtı uçotu olan hallarda ödənişin düzgün aparılması",
+                "İllik məzuniyyət ödənişinin orta əmək haqqı əsasında hesablanması",
+                "Son 12 ayın orta əmək haqqının düzgün hesablanması",
+                "Xəstəlik müavinətinin qanuni qaydada hesablanması və ödənilməsi",
+                "Ezamiyyə ödənişlərinin (gündəlik, yol, yaşayış xərcləri) hesablanması"
+            ], 
+            "5.3 Əmək Haqqından Tutulmalar": [
+                "Gəlir vergisinin (14%) düzgün hesablanması və büdcəyə köçürülməsi",
+                "İşçidən Sosial Sığorta ayırmalarının (3%) tutulması və ödənilməsi",
+                "İşsizliyə qarşı sığorta üzrə tutulmaların (0.5%) aparılması",
+                "İşəgötürən tərəfindən Sosial Sığorta ödənişlərinin (22%) vaxtında ödənilməsi",
+                "Məhkəmə icra vərəqələri əsasında tutulan məbləğlərin düzgün hesablanması və köçürülməsi",
+                "Aliment ödənişlərinin müəyyən edilmiş qaydada tutulması və ünvanlı ödənilməsi",
+                "İşçilərə verilmiş avansların əmək haqqından tutulması",
+                "Digər qanunla müəyyən edilmiş tutulmaların (məsələn, kredit ödənişləri) aparılması"
+            ], 
+            "5.4 Əmək Haqqı Prosesləri": [
+                "Əmək haqqının hesablanması və ödənilməsi üçün aylıq təqvimin (payroll calendar) olması",
+                "Əmək haqqı ödəniş tarixlərinin aydın müəyyənləşdirilməsi və vaxtında yerinə yetirilməsi",
+                "İşçilərə aylıq əmək haqqı hesab-sorğularının (payslip) verilməsi",
+                "Bank köçürmələri vasitəsilə əmək haqqının ödənilməsi proseslərinin həyata keçirilməsi",
+                "Əmək haqqı sənədlərinin arxivləşdirilməsi və saxlanma müddətlərinə riayət edilməsi",
+                "Əmək haqqı məlumatlarının məxfiliyinin təmin edilməsi",
+                "Əmək haqqı üzrə aylıq, rüblük və illik hesabatların hazırlanması"
+            ], 
+            "5.5 Ezamiyyət Ödənişləri": [
+                "İşgüzar ezamiyyət əmrlərinin düzgün tərtib edilməsi və təsdiq olunması",
+                "Ezamiyyət vəsiqələrinin (komandirovka vərəqələri) rəsmiləşdirilməsi",
+                "Günlük (per diem) ödənişlərin qanunla müəyyən edilmiş norma əsasında hesablanması",
+                "Ezamiyyət zamanı yol xərclərinin (nəqliyyat) hesablanması və ödənilməsi",
+                "Ezamiyyət zamanı yaşayış xərclərinin (otel) hesablanması və ödənilməsi",
+                "Ezamiyyətdən qayıdışdan sonra avans hesabatlarının (expense report) təqdim edilməsi",
+                "Xarici ezamiyyətlər üçün əlavə prosedurların və ödənişlərin tətbiqi"
+            ]
+        }
+    },
+    "6. İşçilərə Verilən Müavinətlər və Mükafatlar": { 
+        icon: "fa-gift", 
+        subcategories: { 
+            "6.1 Sosial Paket və Müavinətlər": [
+                "Şirkətdə sosial paket siyasətinin mövcudluğu və aydın müəyyənləşdirilməsi",
+                "İşçilər üçün tibbi sığorta proqramının təmin edilməsi",
+                "Həyat sığortası proqramının mövcudluğu və şərtlərinin müəyyənləşdirilməsi",
+                "Əlavə pensiya (müavinət) proqramlarının tətbiqi",
+                "Nahar və nəqliyyat xərclərinin kompensasiyası və ya təmin edilməsi",
+                "İşçilərin və ailə üzvlərinin təhsil xərclərinin dəstəklənməsi proqramları",
+                "İdman və wellness (sağlamlıq) proqramlarının təmin edilməsi",
+                "Digər əlavə müavinətlərin (benefits) növləri və şərtləri"
+            ], 
+            "6.2 Performansın Qiymətləndirilməsi": [
+                "İşçilərin performansını qiymətləndirmə sisteminin mövcudluğu",
+                "Əsas Performans Göstəriciləri (KPI) və fərdi məqsədlərin müəyyənləşdirilməsi",
+                "Mütəmadi performans qiymətləndirmələrinin (rüblük, yarımillik, illik) keçirilməsi",
+                "360 dərəcə qiymətləndirmə metodologiyasının tətbiqi",
+                "Performans təkmilləşdirmə planlarının (Performance Improvement Plan) hazırlanması",
+                "Performans nəticələri ilə mükafatlandırma arasında əlaqənin qurulması"
+            ], 
+            "6.3 Bonuslar və Mükafatlandırma": [
+                "Bonus siyasətinin mövcudluğu və meyarlarının aydın müəyyənləşdirilməsi",
+                "İllik bonusların hesablanması və ödənilməsi qaydalarının olması",
+                "Layihə bonuslarının və təşviqlərin müəyyənləşdirilməsi",
+                "İşçiləri həvəsləndirmək üçün təşviq proqramlarının (incentive programs) tətbiqi",
+                "İşçilərin tanınması və qiymətləndirilməsi proqramlarının (recognition programs) həyata keçirilməsi",
+                "Təqaüd, mükafat və digər maddi həvəsləndirmə formalarının tətbiqi"
+            ]
+        }
+    },
+    "7. Təlim və İnkişaf (L&D)": { 
+        icon: "fa-graduation-cap", 
+        subcategories: { 
+            "7.1 Təlim Proqramları": [
+                "İllik təlim planının hazırlanması və təsdiq edilməsi",
+                "Təlim ehtiyaclarının analizi (Training Needs Analysis - TNA) aparılması",
+                "Yeni işçilər üçün adaptasiya təlimlərinin (onboarding training) keçirilməsi",
+                "Texniki və peşə təlimlərinin planlaşdırılması və həyata keçirilməsi",
+                "Yumşaq bacarıqlar üzrə təlimlərin (soft skills training) təşkili",
+                "Rəhbərlik və liderlik inkişafı proqramlarının keçirilməsi",
+                "Qanunvericiliyə uyğunluq və məcburi təlimlərin (compliance training) aparılması",
+                "Təlimlərin effektivliyinin qiymətləndirilməsi (post-training evaluation)",
+                "Təlim büdcəsinin planlaşdırılması və idarə edilməsi"
+            ], 
+            "7.2 Karyera İnkişafı": [
+                "İşçilər üçün fərdi inkişaf planlarının (Individual Development Plan - IDP) hazırlanması",
+                "Ardıcıllıq planlaşdırması (succession planning) sisteminin qurulması",
+                "Mentorluq və coaching proqramlarının təşkili",
+                "Daxili mobilllik (şirkət daxilində vəzifə dəyişikliyi) imkanlarının yaradılması",
+                "İstedadların idarə edilməsi (talent management) sisteminin tətbiqi",
+                "İnkişaf və qiymətləndirmə mərkəzlərinin (assessment/development centers) fəaliyyəti"
+            ]
+        }
+    },
+    "8. İnsan Resursları İnformasiya Sistemi (HRIS)": { 
+        icon: "fa-desktop", 
+        subcategories: { 
+            "8.1 Sistemin Funksionallığı": [
+                "İnsan Resursları İnformasiya Sisteminin (HRIS) şirkətdə mövcudluğu",
+                "Sistemdə olan məlumatların dəqiqliyi və etibarlılığı",
+                "Sistemdəki məlumatların faktiki vəziyyətə uyğunluğu",
+                "İş vaxtı idarəetməsi modulunun (time & attendance) mövcudluğu və işlərliyi",
+                "Əmək haqqı hesablamaları modulunun (payroll) mövcudluğu və funksionallığı",
+                "Məzuniyyət idarəetməsi modulunun (leave management) işlərliyi",
+                "Performans idarəetməsi modulunun (performance management) mövcudluğu",
+                "İşə qəbul modulunun (recruitment & applicant tracking) fəaliyyəti",
+                "Təlim və inkişaf modulunun (learning & development) mövcudluğu"
+            ], 
+            "8.2 Məlumat Bütövlüyü və Keyfiyyəti": [
+                "Sistemdə olan məlumatların mütəmadi olaraq yenilənməsi (aktuallaşdırılması)",
+                "Dublikat (təkrarlanan) qeydlərin yoxlanılması və təmizlənməsi",
+                "Məlumat ehtiyat nüsxələrinin (backup) mütəmadi yaradılması proseslərinin olması",
+                "Köhnə sistemdən yeni sistemə məlumat köçürülməsinin (data migration) düzgünlüyü",
+                "Sistem auditlərinin (data audit) mütəmadi aparılması",
+                "Məlumat təmizləmə (data cleaning) proseslərinin həyata keçirilməsi"
+            ], 
+            "8.3 Məlumat Təhlükəsizliyi": [
+                "İstifadəçilərin sistemə giriş hüquqlarının (user access rights) düzgün təyin edilməsi",
+                "Parol siyasətinin (password policy) mövcudluğu və tətbiqi",
+                "Şəxsi məlumatların məxfiliyini təmin edən tədbirlərin görülməsi",
+                "İstifadəçi fəaliyyətlərinin loqlarının (audit logs) saxlanılması",
+                "Kibertəhlükəsizlik tədbirlərinin (cyber security measures) tətbiqi",
+                "Şəxsi məlumatların mühafizəsi üzrə GDPR tələblərinə uyğunluq"
+            ], 
+            "8.4 Sistemlərin İnteqrasiyası": [
+                "Elektron Əmək Müqaviləsi Aparat Sistemi (ƏMAS/SİMA) ilə inteqrasiya",
+                "Mühasibat uçotu sistemləri (ERP/accounting software) ilə əlaqə",
+                "Bank sistemləri ilə əmək haqqı ödənişləri üzrə inteqrasiya",
+                "Sosial Sığorta və İşsizliyə qarşı Sığorta Fondu (DOST) sistemi ilə əlaqə",
+                "Elektron imza sistemləri ilə inteqrasiya",
+                "Digər sistemlərlə API əlaqələrinin qurulması və işlərliyi"
+            ]
+        }
+    },
+    "9. HR Analitika və Hesabatlar": { 
+        icon: "fa-chart-line", 
+        subcategories: { 
+            "9.1 Əsas HR Metriklər": [
+                "İşçi sayı (headcount) üzrə məlumatların mütəmadi izlənilməsi",
+                "İşçi dövranı (turnover rate) göstəricisinin hesablanması və təhlili",
+                "İşə gəlməmə halları (absenteeism) üzrə statistikanın aparılması",
+                "İşə qəbul prosesi üçün tələb olunan vaxt (time to hire/fill) göstəricisi",
+                "İşə qəbul xərcləri (cost per hire) məlumatlarının hesablanması",
+                "Təlim investisiyalarının geri qaytarılması (training ROI) təhlili",
+                "İşçilərin məşğulluğu (engagement) səviyyəsinin ölçülməsi",
+                "Müxtəliflik və inklüzivlik (diversity & inclusion) göstəricilərinin izlənilməsi"
+            ], 
+            "9.2 Hesabatlar və Reporting": [
+                "Aylıq HR hesabatlarının hazırlanması və rəhbərliyə təqdim edilməsi",
+                "Rüblük HR analitika hesabatlarının tərtib edilməsi",
+                "İllik HR hesabatlarının (annual HR report) hazırlanması",
+                "Sosial Sığorta və İşsizliyə qarşı Sığorta Fondu üzrə hesabatların düzgün tərtib edilməsi",
+                "Vergi orqanlarına hesabatların vaxtında və düzgün təqdim edilməsi",
+                "Dövlət statistika orqanlarına statistik hesabatların hazırlanması",
+                "Müvafiq dövlət orqanlarına tələb olunan hesabatların vaxtında təqdim edilməsi"
+            ]
+        }
+    },
+    "10. Əmək Mühafizəsi və Təhlükəsizlik (SƏTƏM)": { 
+        icon: "fa-helmet-safety", 
+        subcategories: { 
+            "10.1 İş Mühafizəsi": [
+                "Əmək mühafizəsi və təhlükəsizlik siyasətlərinin mövcudluğu",
+                "Əmək mühafizəsi üzrə cavabdeh şəxslərin təyin edilməsi və səlahiyyətlərinin müəyyənləşdirilməsi",
+                "İş yerlərinin əmək mühafizəsi tələblərinə uyğunluğunun attestasiyası",
+                "İş yerlərində risk qiymətləndirməsinin (risk assessment) aparılması",
+                "İşçilərin mütəmadi tibbi müayinələrdən (medical check-up) keçirilməsi",
+                "Əmək mühafizəsi üzrə təlimlərin (safety training) keçirilməsi və qeydiyyatı",
+                "Fərdi mühafizə vasitələrinin (personal protective equipment - PPE) təmin edilməsi",
+                "İş yerlərində baş verən qəza və bədbəxt hadisələrin qeydiyyatı və araşdırılması",
+                "Peşə xəstəlikləri ilə bağlı statistikanın aparılması və qarşısının alınması tədbirləri"
+            ], 
+            "10.2 Fövqəladə Hallar": [
+                "Fövqəladə hallarda təxliyə planlarının (evacuation plans) hazırlanması",
+                "Yanğın təhlükəsizliyi qaydalarına riayət və yanğınsöndürmə vasitələrinin mövcudluğu",
+                "İlk tibbi yardım vasitələrinin (first aid kit) təmin edilməsi və işçilərin təlimi",
+                "Fövqəladə hallarda əlaqə məlumatlarının (emergency contacts) hazır olması",
+                "Krizis vəziyyətləri üçün fəaliyyət planının (crisis management plan) mövcudluğu"
+            ]
+        }
+    },
+    "11. İşçilərin Məşğulluğu və Razılığı (Employee Engagement)": { 
+        icon: "fa-heart", 
+        subcategories: { 
+            "11.1 İşçi Məmnuniyyəti": [
+                "İşçi məmnuniyyəti sorğularının (employee satisfaction survey) mütəmadi keçirilməsi",
+                "Qısa və tez-tez keçirilən sorğuların (pulse surveys) həyata keçirilməsi",
+                "İşdən çıxan işçilərlə çıxış müsahibələrinin (exit interview) keçirilməsi və nəticələrin təhlili",
+                "Mövcud işçilərlə saxlama müsahibələrinin (stay interviews) aparılması",
+                "İşçilərin şikayət və təkliflərinin qəbulu mexanizminin effektiv işləməsi",
+                "İşçi Tövsiyə Balı (Employee Net Promoter Score - eNPS) göstəricisinin ölçülməsi"
+            ], 
+            "11.2 Korporativ Mədəniyyət": [
+                "Şirkətin əsas dəyərlərinin (core values) müəyyənləşdirilməsi və təbliği",
+                "Daxili kommunikasiya kanallarının (intranet, newsletter, townhall) effektiv işləməsi",
+                "Komanda quruculuğu tədbirlərinin (team building activities) təşkili",
+                "Korporativ tədbirlərin (corporate events) planlaşdırılması və keçirilməsi",
+                "Daxili informasiya mübadiləsi üçün platformaların (communication platforms) mövcudluğu",
+                "İşçilərin tanınması və qiymətləndirilməsi proqramlarının (recognition programs) tətbiqi"
+            ]
+        }
+    },
+    "12. Müxtəliflik, Bərabərlik və İnklüzivlik (DEI)": { 
+        icon: "fa-people-group", 
+        subcategories: { 
+            "12.1 DEI Siyasətləri": [
+                "Müxtəliflik, Bərabərlik və İnklüzivlik siyasətinin mövcudluğu",
+                "Bərabər imkanlar siyasətinin (equal opportunity policy) tətbiqi",
+                "Diskriminasiyaya qarşı mübarizə siyasətlərinin (anti-discrimination policy) həyata keçirilməsi",
+                "İş yerində təcavüz və əziyyət hallarının (harassment) qarşısının alınması siyasəti",
+                "Əlilliyi olan şəxslərin hüquqlarının təmin edilməsi",
+                "Gender əmək haqqı fərqinin (gender pay gap) monitorinqi və təhlili",
+                "Müxtəliflik və inklüzivlik göstəricilərinin (diversity metrics) ölçülməsi"
+            ]
+        }
+    },
+    "13. Xarici Provayderlərin İdarə Edilməsi (Vendor Management)": { 
+        icon: "fa-file-signature", 
+        subcategories: { 
+            "13.1 Vendorların İdarə Edilməsi": [
+                "İnsan Resursları xidməti provayderləri ilə əməkdaşlıq və müqavilələr",
+                "İşə qəbul agentlikləri (recruitment agencies) ilə münasibətlərin idarə edilməsi",
+                "Təlim təminatçıları (training providers) ilə əməkdaşlıq və qiymətləndirmə",
+                "Əmək haqqı hesablamaları üzrə autsorsing xidmətləri (payroll outsourcing)",
+                "Namizədlərin keçmişinin yoxlanılması xidmətləri (background check services)",
+                "Sığorta şirkətləri ilə müqavilələrin idarə edilməsi",
+                "İnsan Resursları İnformasiya Sistemi provayderləri (HRIS vendors) ilə əlaqələr",
+                "Xidmət Səviyyəsi Müqavilələrinin (Service Level Agreement - SLA) monitorinqi və qiymətləndirilməsi"
+            ]
+        }
+    },
+    "14. Sənədlərin İdarə Edilməsi (Document Management)": { 
+        icon: "fa-folder-open", 
+        subcategories: { 
+            "14.1 Sənəd İdarəetməsi": [
+                "Sənədlərin idarə edilməsi siyasətinin mövcudluğu",
+                "Sənədlərin saxlanma müddətləri və qaydalarının müəyyənləşdirilməsi",
+                "Sənədlərin arxivləşdirilməsi (archiving) prosedurlarının həyata keçirilməsi",
+                "Müddəti keçmiş sənədlərin məhv edilməsi (disposal) qaydalarının tətbiqi",
+                "Sənədlərin elektron dövriyyəsinin (electronic document management) təşkili",
+                "Sənədlərə giriş hüquqlarının (access rights) düzgün təyin edilməsi",
+                "Sənədlərin təhlükəsizliyi və məxfiliyinin (confidentiality) təmin edilməsi",
+                "Müxtəlif növ sənədlər üçün saxlama müddətlərinin (retention periods) müəyyənləşdirilməsi"
+            ]
+        }
+    },
+    "15. Daxili və Xarici Auditlər": { 
+        icon: "fa-list-check", 
+        subcategories: { 
+            "15.1 Audit və Monitorinq": [
+                "Daxili HR auditlərinin mütəmadi aparılması",
+                "Xarici auditlərin (external audit) keçirilməsi və nəticələrə uyğun tədbirlər",
+                "HR proseslər üzrə yoxlama siyahılarının (audit checklists) hazırlanması",
+                "Audit zamanı aşkar edilmiş nöqsanların aradan qaldırılması planlarının tərtib edilməsi",
+                "Əmək müfəttişliyinin yoxlamalarına hazırlıq (labor inspection preparedness)",
+                "Sosial Sığorta Fondunun yoxlamalarına hazırlığın təmin edilməsi",
+                "Vergi orqanlarının yoxlamalarına hazırlıq tədbirlərinin görülməsi",
+                "Audit tövsiyyələrinin icrasının izlənilməsi və monitorinqi"
+            ]
+        }
+    },
+    "16. Fəaliyyətin Qiymətləndirilməsi və Karyera İnkişafı": { 
+        icon: "fa-chart-line", 
+        subcategories: { 
+            "16.1 Qiymətləndirmə və İnkişaf": [
+                "Davranış kompetensiyaları (behavioral competencies) üzrə işçilərin qiymətləndirilməsi",
+                "Texniki bacarıqlar və bilik səviyyəsi (technical skills) üzrə qiymətləndirmə",
+                "Karyera inkişafı modellərinin mövcudluğu (həm ənənəvi, həm də çevik (agile) metodologiyalar üçün)",
+                "Performansa əsaslanan mükafatlandırma sisteminin (performance-based rewards) tətbiqi",
+                "Geri bildiriş mədəniyyətinin (feedback culture) formalaşdırılması və inkişaf etdirilməsi"
+            ]
+        }
+    }
+}
 
         let auditItems = {};
         let currentItemId = null;
